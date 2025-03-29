@@ -6,7 +6,7 @@ import Help from "./components/Help";
 import Settings from "./components/Settings";
 import { createContext, useState } from "react";
 import { boardDefault } from "./BoardStatus";
-import allDraftPicks from "./DraftPicks.json";
+import allDraftPicks from "./data/DraftPicks.json";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 export const AppContext = createContext();
