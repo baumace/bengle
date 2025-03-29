@@ -1,6 +1,6 @@
 import "./Help.css";
 import React, { useContext } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 
 function Help() {
   const { popupActive, setPopupActive } = useContext(AppContext);

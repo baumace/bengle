@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import "./SearchBox.css";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 
 let inputUserText = "";
 

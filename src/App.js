@@ -1,9 +1,9 @@
 import "./App.css";
-import Board from "./components/Board";
-import SearchBox from "./components/SearchBox";
-import GameOver from "./components/GameOver";
-import Help from "./components/Help";
-import Settings from "./components/Settings";
+import Board from "./components/board/Board";
+import SearchBox from "./components/search-box/SearchBox";
+import GameOver from "./components/game-over/GameOver";
+import Help from "./components/help/Help";
+import Settings from "./components/settings/Settings";
 import { createContext, useState } from "react";
 import { boardDefault } from "./BoardStatus";
 import allDraftPicks from "./data/DraftPicks.json";

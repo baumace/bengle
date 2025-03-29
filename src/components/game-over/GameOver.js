@@ -1,6 +1,6 @@
 import "./GameOver.css";
 import React, { useContext } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../../App";
 
 function GameOver() {
   const { gameOver, currAttempt, correctPick, popupActive, setPopupActive } =
