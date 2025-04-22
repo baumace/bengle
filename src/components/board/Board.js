@@ -1,5 +1,5 @@
 import React from "react";
-import Cell from "./Cell";
+import Cell from "../cell/Cell";
 
 /*
  * Creates the 8 row by 6 cell board that will display the information of the game.
