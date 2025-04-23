@@ -1,22 +1,24 @@
-import React from "react";
 import Cell from "../cell/Cell";
 
-/*
- * Creates the 8 row by 6 cell board that will display the information of the game.
- */
-function Board() {
+interface BoardProps {
+  board: Array<Array<any>>;
+  correctPick: Player;
+  currentAttempt: number;
+}
+
+function Board({ board, correctPick, currentAttempt }: BoardProps) {
   /*
    * Returns a complete row of 6 cells to contain information.
    */
-  function row(attemptNum) {
+  function row(attemptNum: number) {
     return (
       <div className="row">
-        <Cell infoIdentifier={0} attemptVal={attemptNum} />
-        <Cell infoIdentifier={1} attemptVal={attemptNum} />
-        <Cell infoIdentifier={2} attemptVal={attemptNum} />
-        <Cell infoIdentifier={3} attemptVal={attemptNum} />
-        <Cell infoIdentifier={4} attemptVal={attemptNum} />
-        <Cell infoIdentifier={5} attemptVal={attemptNum} />
+        <Cell infoIdentifier={0} attemptVal={attemptNum} board={board} correctPick={correctPick} currAttempt={currentAttempt} />
+        <Cell infoIdentifier={1} attemptVal={attemptNum} board={board} correctPick={correctPick} currAttempt={currentAttempt} />
+        <Cell infoIdentifier={2} attemptVal={attemptNum} board={board} correctPick={correctPick} currAttempt={currentAttempt} />
+        <Cell infoIdentifier={3} attemptVal={attemptNum} board={board} correctPick={correctPick} currAttempt={currentAttempt} />
+        <Cell infoIdentifier={4} attemptVal={attemptNum} board={board} correctPick={correctPick} currAttempt={currentAttempt} />
+        <Cell infoIdentifier={5} attemptVal={attemptNum} board={board} correctPick={correctPick} currAttempt={currentAttempt} />
       </div>
     );
   }

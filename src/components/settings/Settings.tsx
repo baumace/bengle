@@ -1,19 +1,28 @@
-import React, { useContext, useState } from "react";
-import { AppContext } from "../../App";
+import { useState } from "react";
 import "./Settings.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { Era } from "../Era";
 
-function Settings() {
-  const {
-    popupActive,
-    setPopupActive,
-    selectNewPlayer,
-    filterData,
-    resetGame,
-    selectedEra,
-    setSelectedEra,
-  } = useContext(AppContext);
+interface SettingsProps {
+  popupActive: { settings: boolean, help: boolean, gameOver: boolean };
+  setPopupActive: (state: any) => void;
+  selectNewPlayer: (data: any) => void;
+  filterData: () => any;
+  resetGame: () => void;
+  selectedEra: Era;
+  setSelectedEra: (era: Era) => void;
+}
+
+function Settings({
+  popupActive,
+  setPopupActive,
+  selectNewPlayer,
+  filterData,
+  resetGame,
+  selectedEra,
+  setSelectedEra,
+}: SettingsProps) {
   const [dropdownActive, setDropdownActive] = useState({ active: false });
   const eraYears = [
     "All Years",
@@ -53,38 +62,10 @@ function Settings() {
     handleExitClick();
   };
 
-  const handleDropdownItemClick = (id) => {
+  const handleDropdownItemClick = (id: Era) => {
     // Is the id equal to the already selected era?
-    if (id !== selectedEra.era) {
-      // Change selected era depending on id
-      switch (id) {
-        // Change to all eras
-        case 0:
-          setSelectedEra({ era: 0 });
-          break;
-        // Change to 2010-Pres.
-        case 1:
-          setSelectedEra({ era: 1 });
-          break;
-        // Change to 2000-2009
-        case 2:
-          setSelectedEra({ era: 2 });
-          break;
-        // Change to 1990-1999
-        case 3:
-          setSelectedEra({ era: 3 });
-          break;
-        // Change to 1980-1989
-        case 4:
-          setSelectedEra({ era: 4 });
-          break;
-        // Change to 1968-1979
-        case 5:
-          setSelectedEra({ era: 5 });
-          break;
-      }
-
-      // Toggle the dropdown content
+    if (id !== selectedEra) {
+      setSelectedEra(id);
       handleDropdownClick();
     }
   };
@@ -127,7 +108,7 @@ function Settings() {
             }}
             id={dropdownActive.active ? "active" : "inactive"}
           >
-            <p>{eraYears[selectedEra.era]}</p>
+            <p>{eraYears[selectedEra]}</p>
           </div>
 
           <div
@@ -137,7 +118,7 @@ function Settings() {
             <div
               className="eraDropdownItem"
               onClick={() => {
-                handleDropdownItemClick(0);
+                handleDropdownItemClick(Era.AllPlayers);
               }}
             >
               <p>{eraYears[0]}</p>
@@ -145,7 +126,7 @@ function Settings() {
             <div
               className="eraDropdownItem"
               onClick={() => {
-                handleDropdownItemClick(1);
+                handleDropdownItemClick(Era.TwoThousandTens);
               }}
             >
               <p>{eraYears[1]}</p>
@@ -153,7 +134,7 @@ function Settings() {
             <div
               className="eraDropdownItem"
               onClick={() => {
-                handleDropdownItemClick(2);
+                handleDropdownItemClick(Era.TwoThousands);
               }}
             >
               <p>{eraYears[2]}</p>
@@ -161,7 +142,7 @@ function Settings() {
             <div
               className="eraDropdownItem"
               onClick={() => {
-                handleDropdownItemClick(3);
+                handleDropdownItemClick(Era.Nineties);
               }}
             >
               <p>{eraYears[3]}</p>
@@ -169,7 +150,7 @@ function Settings() {
             <div
               className="eraDropdownItem"
               onClick={() => {
-                handleDropdownItemClick(4);
+                handleDropdownItemClick(Era.Eighties);
               }}
             >
               <p>{eraYears[4]}</p>
@@ -177,7 +158,7 @@ function Settings() {
             <div
               className="eraDropdownItem"
               onClick={() => {
-                handleDropdownItemClick(5);
+                handleDropdownItemClick(Era.Seventies);
               }}
               id="lastItem"
             >

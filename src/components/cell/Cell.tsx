@@ -1,12 +1,16 @@
-import React, { useContext } from "react";
-import { AppContext } from "../../App";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./Cell.css";
 
-function Cell({ infoIdentifier, attemptVal }) {
-  // Imported variables
-  const { board, correctPick, currAttempt } = useContext(AppContext);
+interface CellProps {
+  infoIdentifier: number;
+  attemptVal: number;
+  board: Array<Array<any>>;
+  correctPick: Player;
+  currAttempt: number;
+}
+
+function Cell({ infoIdentifier, attemptVal, board, correctPick, currAttempt }: CellProps) {
   const cellInfo = board[attemptVal][infoIdentifier];
 
   // Variables to store cellInfo descriptions
@@ -25,7 +29,7 @@ function Cell({ infoIdentifier, attemptVal }) {
   isHeader = attemptVal === 0;
 
   // Is the cell empty?
-  let isEmpty = attemptVal >= currAttempt.attempt;
+  let isEmpty = attemptVal >= currAttempt;
 
   // If row is not a header nor empty, check the cell's info
   if (!isHeader && !isEmpty) {
