@@ -1,17 +1,20 @@
 import "./GameOver.css";
-import React, { useContext } from "react";
-import { AppContext } from "../../App";
 
-function GameOver() {
-  const { gameOver, currAttempt, correctPick, popupActive, setPopupActive } =
-    useContext(AppContext);
+interface GameOverProps {
+  gameOver: { guessedPlayer: boolean };
+  currAttempt: number;
+  correctPick: Player;
+  popupActive: { gameOver: boolean };
+  setPopupActive: (state: any) => void;
+}
 
+function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupActive }: GameOverProps) {
   const winScreen = () => {
     return (
       <div>
         <p>Draft grade: A+</p>
         <p>
-          You guessed the correct player in {currAttempt.attempt - 1}{" "}
+          You guessed the correct player in {currAttempt - 1}{" "}
           selections!
         </p>
       </div>

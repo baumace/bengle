@@ -1,10 +1,11 @@
 import "./Help.css";
-import React, { useContext } from "react";
-import { AppContext } from "../../App";
 
-function Help() {
-  const { popupActive, setPopupActive } = useContext(AppContext);
+interface HelpProps {
+  popupActive: { help: boolean };
+  setPopupActive: (state: any) => void;
+}
 
+function Help({ popupActive, setPopupActive }: HelpProps) {
   return (
     <div id={popupActive.help ? "show" : "hide"}>
       <div className="popupWall" />
