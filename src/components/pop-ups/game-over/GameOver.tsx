@@ -1,3 +1,4 @@
+import { Player } from "../../Player";
 import "./GameOver.css";
 
 interface GameOverProps {

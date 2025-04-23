@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import "./SearchBox.css";
+import { Player } from "../Player";
 
 let inputUserText = "";
 
@@ -17,19 +18,22 @@ function SearchBox({ placeholder, data, disabled, selectPlayer }: SearchBoxProps
   const [search, setSearch] = useState("");
 
   // Handle the selection of a data entry
-  const handleSelection = (value: Player) => {
-    // Select the passed value
-    selectPlayer(value);
+  const handleSelection = useCallback(
+    (value: Player) => {
+      // Select the passed value
+      selectPlayer(value);
 
-    // Reset the filtered data in the search results
-    setFilteredData(filteredData.slice(0, 0));
+      // Reset the filtered data in the search results
+      setFilteredData(filteredData.slice(0, 0));
 
-    // Clear the search bar input text
-    setSearch("");
+      // Clear the search bar input text
+      setSearch("");
 
-    // Reset the data item index to -1
-    setDataItemIndex(-1);
-  };
+      // Reset the data item index to -1
+      setDataItemIndex(-1);
+    },
+    [selectPlayer, filteredData] // Add dependencies here
+  );
 
   // Search bar selection
   const handleKeyboard = useCallback((event: KeyboardEvent) => {

@@ -1,6 +1,7 @@
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import "./Cell.css";
+import { Player } from "../Player";
 
 interface CellProps {
   infoIdentifier: number;
@@ -99,15 +100,12 @@ function Cell({ infoIdentifier, attemptVal, board, correctPick, currAttempt }: C
 
           // Is the correct position on offense?
           if (offense.includes(correctPos)) {
-            // Is the guessed position also on offense? (in the same group)
             isAlmost = offense.includes(cellInfo);
           } // Is the correct position on defense?
           else if (defense.includes(correctPos)) {
-            // Is the guessed position also on defense? (in the same group)
             isAlmost = defense.includes(cellInfo);
           } // The correct position must be on special teams
           else {
-            // Is the guessed position also on special teams? (in the same group)
             isAlmost = special.includes(cellInfo);
           }
         }

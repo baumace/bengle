@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./Settings.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Era } from "../Era";
+import { Era } from "../../Era";
 
 interface SettingsProps {
   popupActive: { settings: boolean, help: boolean, gameOver: boolean };

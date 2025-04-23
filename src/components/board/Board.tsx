@@ -1,4 +1,5 @@
 import Cell from "../cell/Cell";
+import { Player } from "../Player";
 
 interface BoardProps {
   board: Array<Array<any>>;

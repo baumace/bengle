@@ -1,28 +1,40 @@
 import "./App.css";
 import Board from "./components/board/Board";
 import SearchBox from "./components/search-box/SearchBox";
-import GameOver from "./components/game-over/GameOver";
-import Help from "./components/help/Help";
-import Settings from "./components/settings/Settings";
+import GameOver from "./components/pop-ups/game-over/GameOver";
+import Help from "./components/pop-ups/help/Help";
+import Settings from "./components/pop-ups/settings/Settings";
 import { useState } from "react";
-import { boardDefault } from "./BoardStatus";
 import draftPicks from "./data/DraftPicks.json";
 import SettingsIcon from "@mui/icons-material/Settings";
 import HelpIcon from "@mui/icons-material/Help";
 import { Era } from "./components/Era";
+import { Player } from "./components/Player";
 
 // Create constants
-// Maximum allowed number of attempts
 const MAX_ATTEMPTS = 7;
+const INITIAL_ATTEMPT = 1;
 
 // Create the initial correct player
 let correctPick: Player =
   draftPicks[Math.floor(Math.random() * draftPicks.length)];
 
+// Default board to be displayed
+const defaultBoard = [
+  ["PLAYER", "COLLEGE", "YEAR", "POS", "RND", "PICK"],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+];
+
 function App() {
   const [picksArray, setPicksArray] = useState<Player[]>(draftPicks);
-  const [board, setBoard] = useState(boardDefault);
-  const [currAttempt, setCurrAttempt] = useState<number>(1);
+  const [board, setBoard] = useState(defaultBoard);
+  const [currAttempt, setCurrAttempt] = useState<number>(INITIAL_ATTEMPT);
   const [gameOver, setGameOver] = useState({
     gameOver: false,
     guessedPlayer: false,
@@ -92,7 +104,7 @@ function App() {
     }
 
     // Reset the attempt number
-    setCurrAttempt(1);
+    setCurrAttempt(INITIAL_ATTEMPT);
 
     // Set the board to the cleared board
     setBoard(newBoard);
@@ -104,7 +116,6 @@ function App() {
   const selectNewPlayer = (dataArray: Player[]) => {
     correctPick = dataArray[Math.floor(Math.random() * dataArray.length)];
     resetGame();
-    console.log(correctPick);
   };
 
   const filterData = () => {
@@ -154,25 +165,8 @@ function App() {
 
   return (
     <div className="App">
+      <Header />
       <div className="game">
-        <header>
-          <h1>BENGLE</h1>
-          <h2>Bengals Draft Day Selections</h2>
-          <button
-            className="headerButton"
-            id="helpButton"
-            onClick={() => setPopupActive({ help: true, settings: popupActive.settings, gameOver: popupActive.gameOver })}
-          >
-            <HelpIcon className="headerButtonIcon" />
-          </button>
-          <button
-            className="headerButton"
-            id="settingsButton"
-            onClick={() => setPopupActive({ settings: true, help: popupActive.help, gameOver: popupActive.gameOver })}
-          >
-            <SettingsIcon className="headerButtonIcon" />
-          </button>
-        </header>
         <Board board={board} correctPick={correctPick} currentAttempt={currAttempt} />{" "}
         {gameOver.gameOver ? (
           <div
@@ -221,17 +215,7 @@ function App() {
           />
         )}
       </div>
-      <footer>
-        <p>
-          Data Source:{" "}
-          <a href="https://www.pro-football-reference.com/teams/cin/draft.htm">
-            Pro Football Reference
-          </a>
-        </p>
-        <p>
-          Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
-        </p>
-      </footer>
+      <Footer />
       <GameOver
         gameOver={gameOver}
         currAttempt={currAttempt}
@@ -251,6 +235,42 @@ function App() {
       />
     </div>
   );
+
+  function Header() {
+    return <header>
+      <h1>BENGLE</h1>
+      <h2>Bengals Draft Day Selections</h2>
+      <button
+        className="headerButton"
+        id="helpButton"
+        onClick={() => setPopupActive({ help: true, settings: popupActive.settings, gameOver: popupActive.gameOver })}
+      >
+        <HelpIcon className="headerButtonIcon" />
+      </button>
+      <button
+        className="headerButton"
+        id="settingsButton"
+        onClick={() => setPopupActive({ settings: true, help: popupActive.help, gameOver: popupActive.gameOver })}
+      >
+        <SettingsIcon className="headerButtonIcon" />
+      </button>
+    </header>;
+  }
+
+  function Footer() {
+    return <footer>
+      <p>
+        Data Source:{" "}
+        <a href="https://www.pro-football-reference.com/teams/cin/draft.htm">
+          Pro Football Reference
+        </a>
+      </p>
+      <p>
+        Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
+      </p>
+    </footer>;
+  }
+
 }
 
 export default App;
