@@ -2,11 +2,10 @@ import { useState } from "react";
 import "./Settings.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { Era } from "../../Era";
 
 interface SettingsProps {
-  popupActive: { settings: boolean, help: boolean, gameOver: boolean };
-  setPopupActive: (state: any) => void;
   selectNewPlayer: (data: any) => void;
   filterData: () => any;
   resetGame: () => void;
@@ -15,8 +14,6 @@ interface SettingsProps {
 }
 
 function Settings({
-  popupActive,
-  setPopupActive,
   selectNewPlayer,
   filterData,
   resetGame,
@@ -24,6 +21,7 @@ function Settings({
   setSelectedEra,
 }: SettingsProps) {
   const [dropdownActive, setDropdownActive] = useState({ active: false });
+  const [isVisible, setVisibility] = useState(false);
 
   enum ExitClickSource {
     NewPlayer,
@@ -39,7 +37,7 @@ function Settings({
     }
 
     setDropdownActive({ active: false });
-    setPopupActive({ settings: false });
+    setVisibility(false);
   }
 
   const EraDropdown = () => {
@@ -109,34 +107,43 @@ function Settings({
   }
 
   return (
-    <div id={popupActive.settings ? "show" : "hide"}>
-      <div className="popupWall" />
-      <div className="popup" id="settingsPopup">
-        <button
-          className="exitButton"
-          id="settingsExit"
-          onClick={() => handleExitingClick(ExitClickSource.Other)}
-        >
-          X
-        </button>
-        <div
-          className="newPlayerButton"
-          onClick={() => handleExitingClick(ExitClickSource.NewPlayer)}
-        >
-          <p>NEW PLAYER</p>
+    <>
+      <button
+        className="headerButton"
+        id="settingsButton"
+        onClick={() => setVisibility(true)}
+      >
+        <SettingsIcon className="headerButtonIcon" />
+      </button>
+      <div id={isVisible ? "show" : "hide"}>
+        <div className="popupWall" />
+        <div className="popup" id="settingsPopup">
+          <button
+            className="exitButton"
+            id="settingsExit"
+            onClick={() => handleExitingClick(ExitClickSource.Other)}
+          >
+            X
+          </button>
+          <div
+            className="newPlayerButton"
+            onClick={() => handleExitingClick(ExitClickSource.NewPlayer)}
+          >
+            <p>NEW PLAYER</p>
+          </div>
+          <div
+            className="resetBoardButton"
+            onClick={() => handleExitingClick(ExitClickSource.ResetBoard)}
+          >
+            <p>RESET BOARD</p>
+          </div>
+          <div className="eraDropdown">
+            <p className="eraDropdownLabel">Selected Years:</p>
+            <EraDropdown />
+          </div>
         </div>
-        <div
-          className="resetBoardButton"
-          onClick={() => handleExitingClick(ExitClickSource.ResetBoard)}
-        >
-          <p>RESET BOARD</p>
-        </div>
-        <div className="eraDropdown">
-          <p className="eraDropdownLabel">Selected Years:</p>
-          <EraDropdown />
-        </div>
-      </div>
-    </div >
+      </div >
+    </>
   );
 }
 

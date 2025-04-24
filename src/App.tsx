@@ -6,8 +6,6 @@ import Help from "./components/pop-ups/help/Help";
 import Settings from "./components/pop-ups/settings/Settings";
 import { useState } from "react";
 import draftPicks from "./data/DraftPicks.json";
-import SettingsIcon from "@mui/icons-material/Settings";
-import HelpIcon from "@mui/icons-material/Help";
 import { Era } from "./components/Era";
 import { Player } from "./components/Player";
 
@@ -39,8 +37,6 @@ function App() {
   });
   const [popupActive, setPopupActive] = useState({
     gameOver: false,
-    help: false,
-    settings: false,
   });
   const [selectedEra, setSelectedEra] = useState<Era>(Era.All);
 
@@ -74,14 +70,14 @@ function App() {
       setGameOver({ gameOver: true, guessedPlayer: true });
 
       // Activate the gameOver popup
-      setPopupActive({ gameOver: true, help: popupActive.help, settings: popupActive.settings });
+      setPopupActive({ gameOver: true });
     } else if (attemptNum === MAX_ATTEMPTS) {
       // Selection is incorrect, so check if the user used their last attempt
       // Yes, so indicate the game is over and the user did not select the correct player
       setGameOver({ gameOver: true, guessedPlayer: false });
 
       // Activate the gameOver popup
-      setPopupActive({ gameOver: true, help: popupActive.help, settings: popupActive.settings });
+      setPopupActive({ gameOver: true });
     }
   }
 
@@ -139,7 +135,18 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
+      <header>
+        <h1>BENGLE</h1>
+        <h2>Bengals Draft Day Selections</h2>
+      </header>
+      <Help />
+      <Settings
+        selectNewPlayer={selectNewPlayer}
+        filterData={filterData}
+        resetGame={resetGame}
+        selectedEra={selectedEra}
+        setSelectedEra={setSelectedEra}
+      />
       <div className="game">
         <Board board={board} correctPick={correctPick} currentAttempt={currAttempt} />{" "}
         {gameOver.gameOver ? (
@@ -156,7 +163,7 @@ function App() {
             className="giveUpButton"
             onClick={() => {
               setGameOver({ gameOver: true, guessedPlayer: false });
-              setPopupActive({ gameOver: true, help: popupActive.help, settings: popupActive.settings });
+              setPopupActive({ gameOver: true });
             }}
           >
             <p className="giveUpText">GIVE UP</p>
@@ -165,7 +172,7 @@ function App() {
         <div
           className="showResultsButton"
           onClick={() => {
-            setPopupActive({ gameOver: true, help: popupActive.help, settings: popupActive.settings });
+            setPopupActive({ gameOver: true });
           }}
           id={gameOver.gameOver ? "show" : "hide"}
         >
@@ -189,7 +196,17 @@ function App() {
           />
         )}
       </div>
-      <Footer />
+      <footer>
+        <p>
+          Data Source:{" "}
+          <a href="https://www.pro-football-reference.com/teams/cin/draft.htm">
+            Pro Football Reference
+          </a>
+        </p>
+        <p>
+          Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
+        </p>
+      </footer>;
       <GameOver
         gameOver={gameOver}
         currAttempt={currAttempt}
@@ -197,54 +214,8 @@ function App() {
         popupActive={popupActive}
         setPopupActive={setPopupActive}
       />
-      <Help popupActive={popupActive} setPopupActive={setPopupActive} />
-      <Settings
-        popupActive={popupActive}
-        setPopupActive={setPopupActive}
-        selectNewPlayer={selectNewPlayer}
-        filterData={filterData}
-        resetGame={resetGame}
-        selectedEra={selectedEra}
-        setSelectedEra={setSelectedEra}
-      />
     </div>
   );
-
-  function Header() {
-    return <header>
-      <h1>BENGLE</h1>
-      <h2>Bengals Draft Day Selections</h2>
-      <button
-        className="headerButton"
-        id="helpButton"
-        onClick={() => setPopupActive({ help: true, settings: popupActive.settings, gameOver: popupActive.gameOver })}
-      >
-        <HelpIcon className="headerButtonIcon" />
-      </button>
-      <button
-        className="headerButton"
-        id="settingsButton"
-        onClick={() => setPopupActive({ settings: true, help: popupActive.help, gameOver: popupActive.gameOver })}
-      >
-        <SettingsIcon className="headerButtonIcon" />
-      </button>
-    </header>;
-  }
-
-  function Footer() {
-    return <footer>
-      <p>
-        Data Source:{" "}
-        <a href="https://www.pro-football-reference.com/teams/cin/draft.htm">
-          Pro Football Reference
-        </a>
-      </p>
-      <p>
-        Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
-      </p>
-    </footer>;
-  }
-
 }
 
 export default App;
