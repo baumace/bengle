@@ -14,13 +14,7 @@ import { Player } from "./components/Player";
 // Create constants
 const MAX_ATTEMPTS = 7;
 const INITIAL_ATTEMPT = 1;
-
-// Create the initial correct player
-let correctPick: Player =
-  draftPicks[Math.floor(Math.random() * draftPicks.length)];
-
-// Default board to be displayed
-const defaultBoard = [
+const DEFAULT_BOARD = [
   ["PLAYER", "COLLEGE", "YEAR", "POS", "RND", "PICK"],
   ["", "", "", "", "", ""],
   ["", "", "", "", "", ""],
@@ -31,9 +25,13 @@ const defaultBoard = [
   ["", "", "", "", "", ""],
 ];
 
+// Create the initial correct player
+let correctPick: Player =
+  draftPicks[Math.floor(Math.random() * draftPicks.length)];
+
 function App() {
   const [picksArray, setPicksArray] = useState<Player[]>(draftPicks);
-  const [board, setBoard] = useState(defaultBoard);
+  const [board, setBoard] = useState(DEFAULT_BOARD.slice());
   const [currAttempt, setCurrAttempt] = useState<number>(INITIAL_ATTEMPT);
   const [gameOver, setGameOver] = useState({
     gameOver: false,
@@ -44,7 +42,7 @@ function App() {
     help: false,
     settings: false,
   });
-  const [selectedEra, setSelectedEra] = useState<Era>(Era.AllPlayers);
+  const [selectedEra, setSelectedEra] = useState<Era>(Era.All);
 
   /*
    * Selects the passed player, updating the game accordingly.
@@ -87,9 +85,6 @@ function App() {
     }
   }
 
-  /*
-   * Resets the game to its initial state, does not change the correct pick.
-   */
   function resetGame() {
     // Store the current board
     const newBoard = [...board];
@@ -118,49 +113,28 @@ function App() {
     resetGame();
   };
 
-  const filterData = () => {
-    let newFilter;
-    if (selectedEra === Era.AllPlayers) {
-      newFilter = draftPicks;
-    } else {
-      newFilter = draftPicks.filter((value) => {
-        switch (selectedEra) {
-          case Era.Seventies:
-            if (value.year <= 1979) {
-              return value;
-            }
-            break;
-          case Era.Eighties:
-            if (value.year >= 1980 && value.year <= 1989) {
-              return value;
-            }
-            break;
-          case Era.Nineties:
-            if (value.year >= 1990 && value.year <= 1999) {
-              return value;
-            }
-            break;
-          case Era.TwoThousands:
-            if (value.year >= 2000 && value.year <= 2009) {
-              return value;
-            }
-            break;
-          case Era.TwoThousandTens:
-            if (value.year >= 2010) {
-              return value;
-            }
-            break;
-          default:
-            break;
-        }
-      });
+  function draftPicksFilter(player: Player, era: Era): boolean {
+    switch (era) {
+      case Era.Seventies:
+        return player.year < 1980;
+      case Era.Eighties:
+        return player.year >= 1980 && player.year < 1990;
+      case Era.Nineties:
+        return player.year >= 1990 && player.year < 2000;
+      case Era.TwoThousands:
+        return player.year >= 2000 && player.year < 2010;
+      case Era.TwoThousandTens:
+        return player.year >= 2010;
+      default:
+        return true;
     }
+  }
 
-    // Set the picks data to be the new filtered data
-    setPicksArray(newFilter);
-
-    // Return the newFilter
-    return newFilter;
+  const filterData = () => {
+    let filteredDraftPicks = draftPicks;
+    filteredDraftPicks = filteredDraftPicks.filter((player) => draftPicksFilter(player, selectedEra));
+    setPicksArray(filteredDraftPicks);
+    return filteredDraftPicks;
   };
 
   return (
