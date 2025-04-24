@@ -1,9 +1,9 @@
 import "./App.css";
 import Board from "./components/board/Board";
 import SearchBox from "./components/search-box/SearchBox";
-import GameOver from "./components/pop-ups/game-over/GameOver";
-import Help from "./components/pop-ups/help/Help";
-import Settings from "./components/pop-ups/settings/Settings";
+import GameOverPopUp from "./components/pop-ups/game-over/GameOverPopUp";
+import HelpPopUp from "./components/pop-ups/help/HelpPopUp";
+import SettingsPopUp from "./components/pop-ups/settings/SettingsPopUp";
 import { useState } from "react";
 import draftPicks from "./data/DraftPicks.json";
 import { Era } from "./components/Era";
@@ -35,9 +35,7 @@ function App() {
     gameOver: false,
     guessedPlayer: false,
   });
-  const [popupActive, setPopupActive] = useState({
-    gameOver: false,
-  });
+  const [isGameOverPopupActive, setGameOverPopupActive] = useState(false);
   const [selectedEra, setSelectedEra] = useState<Era>(Era.All);
 
   /*
@@ -70,14 +68,14 @@ function App() {
       setGameOver({ gameOver: true, guessedPlayer: true });
 
       // Activate the gameOver popup
-      setPopupActive({ gameOver: true });
+      setGameOverPopupActive(true);
     } else if (attemptNum === MAX_ATTEMPTS) {
       // Selection is incorrect, so check if the user used their last attempt
       // Yes, so indicate the game is over and the user did not select the correct player
       setGameOver({ gameOver: true, guessedPlayer: false });
 
       // Activate the gameOver popup
-      setPopupActive({ gameOver: true });
+      setGameOverPopupActive(true);
     }
   }
 
@@ -139,8 +137,8 @@ function App() {
         <h1>BENGLE</h1>
         <h2>Bengals Draft Day Selections</h2>
       </header>
-      <Help />
-      <Settings
+      <HelpPopUp />
+      <SettingsPopUp
         selectNewPlayer={selectNewPlayer}
         filterData={filterData}
         resetGame={resetGame}
@@ -163,7 +161,7 @@ function App() {
             className="giveUpButton"
             onClick={() => {
               setGameOver({ gameOver: true, guessedPlayer: false });
-              setPopupActive({ gameOver: true });
+              setGameOverPopupActive(true);
             }}
           >
             <p className="giveUpText">GIVE UP</p>
@@ -172,7 +170,7 @@ function App() {
         <div
           className="showResultsButton"
           onClick={() => {
-            setPopupActive({ gameOver: true });
+            setGameOverPopupActive(true);
           }}
           id={gameOver.gameOver ? "show" : "hide"}
         >
@@ -206,13 +204,13 @@ function App() {
         <p>
           Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
         </p>
-      </footer>;
-      <GameOver
+      </footer>
+      <GameOverPopUp
         gameOver={gameOver}
         currAttempt={currAttempt}
         correctPick={correctPick}
-        popupActive={popupActive}
-        setPopupActive={setPopupActive}
+        popupActive={isGameOverPopupActive}
+        setPopupActive={setGameOverPopupActive}
       />
     </div>
   );

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import "./Settings.css";
+import "./SettingsPopUp.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Era } from "../../Era";
 
-interface SettingsProps {
+interface SettingsPopUpProps {
   selectNewPlayer: (data: any) => void;
   filterData: () => any;
   resetGame: () => void;
@@ -13,13 +13,13 @@ interface SettingsProps {
   setSelectedEra: (era: Era) => void;
 }
 
-function Settings({
+function SettingsPopUp({
   selectNewPlayer,
   filterData,
   resetGame,
   selectedEra,
   setSelectedEra,
-}: SettingsProps) {
+}: SettingsPopUpProps) {
   const [dropdownActive, setDropdownActive] = useState({ active: false });
   const [isVisible, setVisibility] = useState(false);
 
@@ -147,4 +147,4 @@ function Settings({
   );
 }
 
-export default Settings;
+export default SettingsPopUp;

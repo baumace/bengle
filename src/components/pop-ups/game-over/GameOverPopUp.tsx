@@ -1,15 +1,15 @@
 import { Player } from "../../Player";
-import "./GameOver.css";
+import "./GameOverPopUp.css";
 
-interface GameOverProps {
+interface GameOverPopUpProps {
   gameOver: { guessedPlayer: boolean };
   currAttempt: number;
   correctPick: Player;
-  popupActive: { gameOver: boolean };
-  setPopupActive: (state: any) => void;
+  popupActive: boolean;
+  setPopupActive: (state: boolean) => void;
 }
 
-function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupActive }: GameOverProps) {
+function GameOverPopUp({ gameOver, currAttempt, correctPick, popupActive, setPopupActive }: GameOverPopUpProps) {
   const winScreen = () => {
     return (
       <div>
@@ -31,13 +31,13 @@ function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupAct
   };
 
   return (
-    <div id={popupActive.gameOver ? "show" : "hide"}>
+    <div id={popupActive ? "show" : "hide"}>
       <div className="popupWall" />
       <div className="popup" id="gameOverPopup">
         <button
           className="exitButton"
           onClick={() => {
-            setPopupActive({ gameOver: false });
+            setPopupActive(false);
           }}
         >
           X
@@ -58,4 +58,4 @@ function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupAct
   );
 }
 
-export default GameOver;
+export default GameOverPopUp;

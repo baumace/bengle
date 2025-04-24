@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "./Help.css";
+import "./HelpPopUp.css";
 import HelpIcon from "@mui/icons-material/Help";
 
-function Help() {
+function HelpPopUp() {
   const [isVisible, setVisibility] = useState(false);
 
   return (
@@ -63,4 +63,4 @@ function Help() {
   );
 }
 
-export default Help;
+export default HelpPopUp;
