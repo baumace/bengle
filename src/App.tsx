@@ -26,6 +26,7 @@ const DEFAULT_BOARD = [
 // Create the initial correct player
 let correctPick: Player =
   draftPicks[Math.floor(Math.random() * draftPicks.length)];
+console.log(correctPick);
 
 function App() {
   const [picksArray, setPicksArray] = useState<Player[]>(draftPicks);
