@@ -2,7 +2,14 @@ import { useCallback, useEffect, useState } from "react";
 import "./SearchBox.css";
 import { Player } from "../Player";
 
-let inputUserText = "";
+const STARTING_INDEX = -1;
+const EMPTY_STRING = "";
+
+enum Key {
+  ENTER = "Enter",
+  ARROW_DOWN = "ArrowDown",
+  ARROW_UP = "ArrowUp",
+};
 
 interface SearchBoxProps {
   placeholder: string;
@@ -12,96 +19,61 @@ interface SearchBoxProps {
 }
 
 function SearchBox({ placeholder, data, disabled, selectPlayer }: SearchBoxProps) {
-  let keyCount = 0;
-  const [filteredData, setFilteredData] = useState<Player[]>([]);
-  const [dataItemIndex, setDataItemIndex] = useState(-1);
-  const [search, setSearch] = useState("");
+  const [autofillOptions, setAutofillOptions] = useState<Player[]>([]);
+  const [autofillOptionIndex, setAutofillOptionIndex] = useState(STARTING_INDEX);
+  const [searchInput, setSearchInput] = useState(EMPTY_STRING);
 
-  // Handle the selection of a data entry
-  const handleSelection = useCallback(
+  // search input changes
+  useEffect(() => {
+    let filteredAutofillOptions: Player[] = [];
+    setAutofillOptionIndex(STARTING_INDEX);
+    if (searchInput !== EMPTY_STRING) {
+      filteredAutofillOptions = data.filter((value) => value.name.toLowerCase().includes(searchInput.toLowerCase()));
+    }
+    setAutofillOptions(filteredAutofillOptions);
+  }, [searchInput, data])
+
+  const handlePlayerSelection = useCallback(
     (value: Player) => {
-      // Select the passed value
       selectPlayer(value);
 
-      // Reset the filtered data in the search results
-      setFilteredData(filteredData.slice(0, 0));
-
-      // Clear the search bar input text
-      setSearch("");
-
-      // Reset the data item index to -1
-      setDataItemIndex(-1);
+      // reset to initial state
+      setAutofillOptions(autofillOptions.slice(0, 0));
+      setSearchInput(EMPTY_STRING);
+      setAutofillOptionIndex(STARTING_INDEX);
     },
-    [selectPlayer, filteredData] // Add dependencies here
+    [selectPlayer, autofillOptions]
   );
 
-  // Search bar selection
   const handleKeyboard = useCallback((event: KeyboardEvent) => {
-    // Does the filtered data have elements in it?
-    if (filteredData.length !== 0) {
-      // Was a key of interest pressed by the user?
-      if (event.key === "Enter") {
-        // The enter key was pressed
-        // Stores the entry from the search results
-        let dataEntry;
-
-        // Is the data item index -1 (the input text index)?
-        if (dataItemIndex === -1) {
-          // Select the first element in the search results
-          dataEntry = filteredData[0];
-        } else {
-          // Select the element at the data item index
-          dataEntry = filteredData[dataItemIndex];
-        }
-
-        // Handle the selection of the data point
-        handleSelection(dataEntry);
-      } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
-        // One of the arrow keys of interest was pressed
-        // Prevent the key from moving the input text cursor
+    if (autofillOptions.length > 0) {
+      if (event.key === Key.ENTER && autofillOptionIndex !== STARTING_INDEX) {
+        handlePlayerSelection(autofillOptions[autofillOptionIndex]);
+      } else if (event.key === Key.ARROW_DOWN) {
         event.preventDefault();
 
-        // Store the current index for the data item cursor
-        let currDataIndex = dataItemIndex;
+        // handle edge case to loop back to search text
+        if (autofillOptionIndex === autofillOptions.length - 1) {
+          setAutofillOptionIndex(STARTING_INDEX);
+        } else {
+          setAutofillOptionIndex((autofillOptionIndex + 1) % autofillOptions.length);
+        }
+      } else if (event.key === Key.ARROW_UP) {
+        event.preventDefault();
 
-        // Which key was pressed and is the data item index in an
-        // acceptable range?
-        if (
-          event.key === "ArrowDown" &&
-          currDataIndex < 3 &&
-          currDataIndex < filteredData.length - 1
-        ) {
-          // Arrrow key up has been pressed
-          // Is the index at the starting position?
-          if (currDataIndex === -1) {
-            // Store the current input text
-            inputUserText = search;
-          }
-
-          // Increment the index for the data item
-          setDataItemIndex(dataItemIndex + 1);
-
-          // Set the input text to be the newly selected player
-          setSearch(filteredData[++currDataIndex].name);
-        } else if (event.key === "ArrowUp" && currDataIndex > -1) {
-          // Decrement the index for the data item
-          setDataItemIndex(dataItemIndex - 1);
-
-          // Is the index anything other than the top element?
-          if (currDataIndex !== 0) {
-            // Set the input text to be the newly selected player
-            setSearch(filteredData[--currDataIndex].name);
-          } else {
-            // The data item will return to the input box, so reset the input text
-            // to the most recent text put in the input text
-            setSearch(inputUserText);
-          }
+        // handle edge case to loop from search text to last option and loop back to search text
+        if (autofillOptionIndex === STARTING_INDEX) {
+          setAutofillOptionIndex(autofillOptions.length - 1);
+        } else if (autofillOptionIndex === STARTING_INDEX + 1) {
+          setAutofillOptionIndex(STARTING_INDEX);
+        } else {
+          setAutofillOptionIndex((autofillOptionIndex - 1) % autofillOptions.length);
         }
       }
     }
-  }, [filteredData, dataItemIndex, search, handleSelection]);
+  }, [autofillOptions, autofillOptionIndex, handlePlayerSelection]);
 
-  // Search bar selection
+  // Add the event listener for the keyboard
   useEffect(() => {
     document.addEventListener("keydown", handleKeyboard);
 
@@ -110,59 +82,30 @@ function SearchBox({ placeholder, data, disabled, selectPlayer }: SearchBoxProps
     };
   }, [handleKeyboard]);
 
-  // Data filter for autocompletion
-  const handleFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // Store the text typed to the input
-    const inputWord = event.target.value;
-
-    // Show the text typed to the input
-    setSearch(inputWord);
-
-    // Filter the data based on the input
-    const newFilter = data.filter((value) => {
-      return value.name.toLowerCase().includes(inputWord.toLowerCase());
-    });
-
-    // Is the input word blank?
-    if (inputWord === "") {
-      // Set filtered data to empty
-      setFilteredData([]);
-    } else {
-      // Set filtered data to contain the filtered players
-      setFilteredData(newFilter);
-    }
-
-    return;
-  };
-
   return (
     <div className="searchBox">
       <div className="searchInput">
         <input
           type="text"
           className="searchInputText"
-          id={filteredData.length !== 0 ? "active" : "inactive"}
-          value={search}
+          id={autofillOptions.length !== 0 ? "active" : "inactive"}
+          value={autofillOptionIndex === STARTING_INDEX ? searchInput : autofillOptions[autofillOptionIndex].name}
           placeholder={placeholder}
-          onChange={handleFilter}
+          onChange={(event) => setSearchInput(event.target.value)}
           disabled={disabled}
         />
       </div>
-      {filteredData.length !== 0 && (
-        <div className="searchResult" id={filteredData.length.toString()}>
-          {filteredData.slice(0, 4).map((value) => {
+      {autofillOptions.length > 0 && (
+        <div className="searchResult">
+          {autofillOptions.map((player, index) => {
             return (
               <div
                 className="dataItem"
-                onClick={() => handleSelection(value)}
-                key={keyCount++}
-                id={
-                  dataItemIndex === keyCount
-                    ? "itemSelected"
-                    : "itemNotSelected"
-                }
+                onClick={() => handlePlayerSelection(player)}
+                key={index}
+                id={autofillOptionIndex === index ? "itemSelected" : "itemNotSelected"}
               >
-                <p> {value.name} </p>
+                <p>{player.name}</p>
               </div>
             );
           })}

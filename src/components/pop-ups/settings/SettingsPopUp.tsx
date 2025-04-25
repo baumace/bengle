@@ -78,12 +78,12 @@ function SettingsPopUp({
           className="eraDropdownContent"
           id={dropdownActive.active ? "show" : "hide"}
         >
-          <EraDropdownItem era={Era.All} />
-          <EraDropdownItem era={Era.TwoThousandTens} />
-          <EraDropdownItem era={Era.TwoThousands} />
-          <EraDropdownItem era={Era.Nineties} />
-          <EraDropdownItem era={Era.Eighties} />
-          <EraDropdownItem era={Era.Seventies} />
+          <EraDropdownItem era={Era.ALL} />
+          <EraDropdownItem era={Era.TWO_THOUSAND_TENS} />
+          <EraDropdownItem era={Era.TWO_THOUSAND} />
+          <EraDropdownItem era={Era.NINETIES} />
+          <EraDropdownItem era={Era.EIGHTIES} />
+          <EraDropdownItem era={Era.SEVENTIES} />
         </div>
         {
           dropdownActive.active ? (

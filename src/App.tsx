@@ -9,7 +9,6 @@ import draftPicks from "./data/DraftPicks.json";
 import { Era } from "./components/Era";
 import { Player } from "./components/Player";
 
-// Create constants
 const MAX_ATTEMPTS = 7;
 const INITIAL_ATTEMPT = 1;
 const DEFAULT_BOARD = [
@@ -37,7 +36,7 @@ function App() {
     guessedPlayer: false,
   });
   const [isGameOverPopupActive, setGameOverPopupActive] = useState(false);
-  const [selectedEra, setSelectedEra] = useState<Era>(Era.All);
+  const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL);
 
   /*
    * Selects the passed player, updating the game accordingly.
@@ -110,15 +109,15 @@ function App() {
 
   function draftPicksFilter(player: Player, era: Era): boolean {
     switch (era) {
-      case Era.Seventies:
+      case Era.SEVENTIES:
         return player.year < 1980;
-      case Era.Eighties:
+      case Era.EIGHTIES:
         return player.year >= 1980 && player.year < 1990;
-      case Era.Nineties:
+      case Era.NINETIES:
         return player.year >= 1990 && player.year < 2000;
-      case Era.TwoThousands:
+      case Era.TWO_THOUSAND:
         return player.year >= 2000 && player.year < 2010;
-      case Era.TwoThousandTens:
+      case Era.TWO_THOUSAND_TENS:
         return player.year >= 2010;
       default:
         return true;
@@ -177,23 +176,12 @@ function App() {
         >
           <p className="showResultsText">SHOW RESULTS</p>
         </div>
-        {gameOver.gameOver ? (
-          <SearchBox
-            placeholder={"Game Over"}
-            data={picksArray}
-            disabled={true}
-            selectPlayer={selectPlayer}
-          />
-        ) : (
-          <SearchBox
-            placeholder={
-              "Selection " + currAttempt + " of " + MAX_ATTEMPTS
-            }
-            data={picksArray}
-            disabled={false}
-            selectPlayer={selectPlayer}
-          />
-        )}
+        <SearchBox
+          placeholder={gameOver.gameOver ? "Game Over" : `Selection ${currAttempt} of ${MAX_ATTEMPTS}`}
+          data={picksArray}
+          disabled={gameOver.gameOver}
+          selectPlayer={selectPlayer}
+        />
       </div>
       <footer>
         <p>

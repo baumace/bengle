@@ -7,7 +7,6 @@ const POSITIONS = {
   ST: ["K", "P", "LS"],
 }
 
-
 interface BoardProps {
   board: Array<Array<any>>;
   correctPick: Player;

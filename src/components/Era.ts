@@ -1,8 +1,8 @@
 export enum Era {
-    Seventies = "1968-1979",
-    Eighties = "1980-1989",
-    Nineties = "1990-1999",
-    TwoThousands = "2000-2009",
-    TwoThousandTens = "2010-Pres.",
-    All = "All Years",
+    SEVENTIES = "1968-1979",
+    EIGHTIES = "1980-1989",
+    NINETIES = "1990-1999",
+    TWO_THOUSAND = "2000-2009",
+    TWO_THOUSAND_TENS = "2010-Pres.",
+    ALL = "All Years",
 }
