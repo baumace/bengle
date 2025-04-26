@@ -10,7 +10,8 @@ interface GameOverPopUpProps {
 }
 
 function GameOverPopUp({ gameOver, currAttempt, correctPick, popupActive, setPopupActive }: GameOverPopUpProps) {
-  const winScreen = () => {
+
+  function WinScreen() {
     return (
       <div>
         <p>Draft grade: A+</p>
@@ -22,7 +23,7 @@ function GameOverPopUp({ gameOver, currAttempt, correctPick, popupActive, setPop
     );
   };
 
-  const loseScreen = () => {
+  function LoseScreen() {
     return (
       <div>
         <p>Draft bust! You were not able to select the correct player.</p>
@@ -43,7 +44,7 @@ function GameOverPopUp({ gameOver, currAttempt, correctPick, popupActive, setPop
           X
         </button>
         <div className="gameOverText">
-          {gameOver.guessedPlayer ? winScreen() : loseScreen()}
+          {gameOver.guessedPlayer ? <WinScreen /> : <LoseScreen />}
           <p>
             The correct player is {correctPick.name}, {correctPick.position}{" "}
             from {correctPick.college}.

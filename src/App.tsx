@@ -6,10 +6,10 @@ import HelpPopUp from "./components/pop-ups/help/HelpPopUp";
 import SettingsPopUp from "./components/pop-ups/settings/SettingsPopUp";
 import { useEffect, useState } from "react";
 import draftPicks from "./data/DraftPicks.json";
-import { Era } from "./models/Era";
+import { Era, filterPlayersByEra } from "./models/Era";
 import { Player } from "./models/Player";
 
-const MAX_ATTEMPTS = 6;
+const MAX_ATTEMPTS = 7;
 const INITIAL_ATTEMPT = 0;
 
 function App() {
@@ -31,6 +31,14 @@ function App() {
     }
   }, [currAttempt]);
 
+  useEffect(() => {
+    resetGame();
+  }, [correctPick]);
+
+  useEffect(() => {
+    setPicksArray(draftPicks.filter((player) => filterPlayersByEra(player, selectedEra)));
+  }, [selectedEra]);
+
   function selectPlayer(player: Player) {
     setBoard([...board, player]);
 
@@ -48,16 +56,8 @@ function App() {
     setGameOver({ gameOver: false, guessedPlayer: false });
   }
 
-  const setNewPlayer = (dataArray: Player[]) => {
-    setCorrectPick(dataArray[Math.floor(Math.random() * dataArray.length)]);
-    resetGame();
-  };
-
-  const filterData = () => {
-    let filteredDraftPicks = draftPicks;
-    filteredDraftPicks = filteredDraftPicks.filter((player) => filterPicksByEra(player, selectedEra));
-    setPicksArray(filteredDraftPicks);
-    return filteredDraftPicks;
+  function setNewPlayer() {
+    setCorrectPick(picksArray[Math.floor(Math.random() * picksArray.length)]);
   };
 
   return (
@@ -68,8 +68,7 @@ function App() {
       </header>
       <HelpPopUp />
       <SettingsPopUp
-        selectNewPlayer={setNewPlayer}
-        filterData={filterData}
+        setNewPlayer={setNewPlayer}
         resetGame={resetGame}
         selectedEra={selectedEra}
         setSelectedEra={setSelectedEra}
@@ -79,9 +78,7 @@ function App() {
         {gameOver.gameOver ? (
           <div
             className="appNewPlayerButton"
-            onClick={() => {
-              setNewPlayer(filterData());
-            }}
+            onClick={() => setNewPlayer()}
           >
             <p className="appNewPlayerText">NEW PLAYER</p>
           </div>
@@ -98,15 +95,13 @@ function App() {
         )}
         <div
           className="showResultsButton"
-          onClick={() => {
-            setGameOverPopupActive(true);
-          }}
+          onClick={() => setGameOverPopupActive(true)}
           id={gameOver.gameOver ? "show" : "hide"}
         >
           <p className="showResultsText">SHOW RESULTS</p>
         </div>
         <SearchBox
-          placeholder={gameOver.gameOver ? "Game Over" : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS + 1}`}
+          placeholder={gameOver.gameOver ? "Game Over" : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`}
           data={picksArray}
           disabled={gameOver.gameOver}
           selectPlayer={selectPlayer}
@@ -135,7 +130,3 @@ function App() {
 }
 
 export default App;
-
-function filterPicksByEra(player: { name: string; college: string; year: number; position: string; round: number; pick: number; }, selectedEra: Era): unknown {
-  throw new Error("Function not implemented.");
-}

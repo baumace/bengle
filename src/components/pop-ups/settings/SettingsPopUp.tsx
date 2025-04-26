@@ -6,21 +6,19 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { Era } from "../../../models/Era";
 
 interface SettingsPopUpProps {
-  selectNewPlayer: (data: any) => void;
-  filterData: () => any;
+  setNewPlayer: () => void;
   resetGame: () => void;
   selectedEra: Era;
   setSelectedEra: (era: Era) => void;
 }
 
 function SettingsPopUp({
-  selectNewPlayer,
-  filterData,
+  setNewPlayer: selectNewPlayer,
   resetGame,
   selectedEra,
   setSelectedEra,
 }: SettingsPopUpProps) {
-  const [dropdownActive, setDropdownActive] = useState({ active: false });
+  const [dropdownActive, setDropdownActive] = useState(false);
   const [isVisible, setVisibility] = useState(false);
 
   enum ExitClickSource {
@@ -31,18 +29,18 @@ function SettingsPopUp({
 
   function handleExitingClick(source?: ExitClickSource) {
     if (source === ExitClickSource.NewPlayer) {
-      selectNewPlayer(filterData());
+      selectNewPlayer();
     } else if (source === ExitClickSource.ResetBoard) {
       resetGame();
     }
 
-    setDropdownActive({ active: false });
+    setDropdownActive(false);
     setVisibility(false);
   }
 
   const EraDropdown = () => {
     const handleDropdownClick = () => {
-      setDropdownActive({ active: !dropdownActive.active });
+      setDropdownActive(!dropdownActive);
     };
 
     function handleDropdownItemClick(era: Era) {
@@ -54,9 +52,7 @@ function SettingsPopUp({
       return (
         <div
           className="eraDropdownItem"
-          onClick={() => {
-            handleDropdownItemClick(era);
-          }}
+          onClick={() => handleDropdownItemClick(era)}
         >
           <p>{era}</p>
         </div>
@@ -67,16 +63,14 @@ function SettingsPopUp({
       <>
         <div
           className="eraDropdownButton"
-          onClick={() => {
-            handleDropdownClick();
-          }}
-          id={dropdownActive.active ? "active" : "inactive"}
+          onClick={() => handleDropdownClick()}
+          id={dropdownActive ? "active" : "inactive"}
         >
           <p>{selectedEra}</p>
         </div>
         <div
           className="eraDropdownContent"
-          id={dropdownActive.active ? "show" : "hide"}
+          id={dropdownActive ? "show" : "hide"}
         >
           <EraDropdownItem era={Era.ALL} />
           <EraDropdownItem era={Era.TWO_THOUSAND_TENS} />
@@ -85,23 +79,17 @@ function SettingsPopUp({
           <EraDropdownItem era={Era.EIGHTIES} />
           <EraDropdownItem era={Era.SEVENTIES} />
         </div>
-        {
-          dropdownActive.active ? (
-            <KeyboardArrowUpIcon
-              className="dropdownArrowIcon"
-              onClick={() => {
-                handleDropdownClick();
-              }}
-            />
-          ) : (
-            <KeyboardArrowDownIcon
-              className="dropdownArrowIcon"
-              onClick={() => {
-                handleDropdownClick();
-              }}
-            />
-          )
-        }
+        {dropdownActive ? (
+          <KeyboardArrowUpIcon
+            className="dropdownArrowIcon"
+            onClick={() => handleDropdownClick()}
+          />
+        ) : (
+          <KeyboardArrowDownIcon
+            className="dropdownArrowIcon"
+            onClick={() => handleDropdownClick()}
+          />
+        )}
       </>
     )
   }
