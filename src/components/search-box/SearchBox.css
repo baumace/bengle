@@ -36,25 +36,10 @@ input:focus {
 .searchResult {
   border: 2px solid black;
   border-top: none;
-  overflow: hidden;
+  overflow: scroll;
+  max-height: 250px;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
-}
-
-#1 {
-  height: 50px;
-}
-
-#2 {
-  height: 100px;
-}
-
-#3 {
-  height: 150px;
-}
-
-#4 {
-  height: 200px;
 }
 
 .searchResult .dataItem {

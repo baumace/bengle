@@ -1,15 +1,17 @@
-import "./GameOver.css";
+import { Player } from "../../../models/Player";
+import "./GameOverPopUp.css";
 
-interface GameOverProps {
+interface GameOverPopUpProps {
   gameOver: { guessedPlayer: boolean };
   currAttempt: number;
   correctPick: Player;
-  popupActive: { gameOver: boolean };
-  setPopupActive: (state: any) => void;
+  popupActive: boolean;
+  setPopupActive: (state: boolean) => void;
 }
 
-function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupActive }: GameOverProps) {
-  const winScreen = () => {
+function GameOverPopUp({ gameOver, currAttempt, correctPick, popupActive, setPopupActive }: GameOverPopUpProps) {
+
+  function WinScreen() {
     return (
       <div>
         <p>Draft grade: A+</p>
@@ -21,7 +23,7 @@ function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupAct
     );
   };
 
-  const loseScreen = () => {
+  function LoseScreen() {
     return (
       <div>
         <p>Draft bust! You were not able to select the correct player.</p>
@@ -30,19 +32,19 @@ function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupAct
   };
 
   return (
-    <div id={popupActive.gameOver ? "show" : "hide"}>
+    <div id={popupActive ? "show" : "hide"}>
       <div className="popupWall" />
       <div className="popup" id="gameOverPopup">
         <button
           className="exitButton"
           onClick={() => {
-            setPopupActive({ gameOver: false });
+            setPopupActive(false);
           }}
         >
           X
         </button>
         <div className="gameOverText">
-          {gameOver.guessedPlayer ? winScreen() : loseScreen()}
+          {gameOver.guessedPlayer ? <WinScreen /> : <LoseScreen />}
           <p>
             The correct player is {correctPick.name}, {correctPick.position}{" "}
             from {correctPick.college}.
@@ -57,4 +59,4 @@ function GameOver({ gameOver, currAttempt, correctPick, popupActive, setPopupAct
   );
 }
 
-export default GameOver;
+export default GameOverPopUp;
