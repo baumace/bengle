@@ -22,14 +22,9 @@ const DEFAULT_BOARD = [
   ["", "", "", "", "", ""],
 ];
 
-// Create the initial correct player
-let correctPick: Player =
-  draftPicks[Math.floor(Math.random() * draftPicks.length)];
-console.log(correctPick);
-
 function App() {
   const [picksArray, setPicksArray] = useState<Player[]>(draftPicks);
-  const [board, setBoard] = useState(DEFAULT_BOARD.slice());
+  const [board, setBoard] = useState([...DEFAULT_BOARD]);
   const [currAttempt, setCurrAttempt] = useState<number>(INITIAL_ATTEMPT);
   const [gameOver, setGameOver] = useState({
     gameOver: false,
@@ -37,6 +32,7 @@ function App() {
   });
   const [isGameOverPopupActive, setGameOverPopupActive] = useState(false);
   const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL);
+  const [correctPick, setCorrectPick] = useState<Player>(draftPicks[Math.floor(Math.random() * draftPicks.length)]);
 
   /*
    * Selects the passed player, updating the game accordingly.
@@ -59,51 +55,26 @@ function App() {
     // Update the board to include this new player
     setBoard(newBoard);
 
-    // Increment the currAttempt
     setCurrAttempt(attemptNum + 1);
 
     // Has the user selected the correctPick?
     if (player === correctPick) {
-      // Yes, so indicate the game is over and the user selected the correct player
       setGameOver({ gameOver: true, guessedPlayer: true });
-
-      // Activate the gameOver popup
       setGameOverPopupActive(true);
     } else if (attemptNum === MAX_ATTEMPTS) {
-      // Selection is incorrect, so check if the user used their last attempt
-      // Yes, so indicate the game is over and the user did not select the correct player
       setGameOver({ gameOver: true, guessedPlayer: false });
-
-      // Activate the gameOver popup
       setGameOverPopupActive(true);
     }
   }
 
   function resetGame() {
-    // Store the current board
-    const newBoard = [...board];
-
-    // Loop through the rows that were modified in the attempt
-    for (let i = 1; i < currAttempt; i++) {
-      // Loop through the cells within the row
-      for (let j = 0; j < 6; j++) {
-        // Set the element's contents to be empty
-        newBoard[i][j] = "";
-      }
-    }
-
-    // Reset the attempt number
+    setBoard([...DEFAULT_BOARD]);
     setCurrAttempt(INITIAL_ATTEMPT);
-
-    // Set the board to the cleared board
-    setBoard(newBoard);
-
-    // Reset gameOver in case it has been modified
     setGameOver({ gameOver: false, guessedPlayer: false });
   }
 
-  const selectNewPlayer = (dataArray: Player[]) => {
-    correctPick = dataArray[Math.floor(Math.random() * dataArray.length)];
+  const setNewPlayer = (dataArray: Player[]) => {
+    setCorrectPick(dataArray[Math.floor(Math.random() * dataArray.length)]);
     resetGame();
   };
 
@@ -139,7 +110,7 @@ function App() {
       </header>
       <HelpPopUp />
       <SettingsPopUp
-        selectNewPlayer={selectNewPlayer}
+        selectNewPlayer={setNewPlayer}
         filterData={filterData}
         resetGame={resetGame}
         selectedEra={selectedEra}
@@ -151,7 +122,7 @@ function App() {
           <div
             className="appNewPlayerButton"
             onClick={() => {
-              selectNewPlayer(filterData());
+              setNewPlayer(filterData());
             }}
           >
             <p className="appNewPlayerText">NEW PLAYER</p>
