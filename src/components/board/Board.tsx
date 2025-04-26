@@ -8,32 +8,18 @@ const POSITIONS = {
 }
 
 interface BoardProps {
-  board: Array<Array<any>>;
+  board: Player[];
   correctPick: Player;
-  currentAttempt: number;
 }
 
-function Board({ board, correctPick, currentAttempt }: BoardProps) {
-
-  function buildPlayerFromBoardRow(attemptNum: number): Player {
-    return {
-      name: board[attemptNum][0],
-      college: board[attemptNum][1],
-      year: Number(board[attemptNum][2]),
-      position: board[attemptNum][3],
-      round: Number(board[attemptNum][4]),
-      pick: Number(board[attemptNum][5]),
-    };
-  }
+function Board({ board, correctPick }: BoardProps) {
 
   interface RowProps {
     guessedPlayer: Player;
     correctPlayer: Player;
-    rowNumber: number;
-    currentAttempt: number;
   }
 
-  function Row({ guessedPlayer, correctPlayer, rowNumber, currentAttempt }: RowProps) {
+  function Row({ guessedPlayer, correctPlayer }: RowProps) {
 
     function buildNameStyleId(name: string): string {
       let id = "big";
@@ -96,7 +82,7 @@ function Board({ board, correctPick, currentAttempt }: BoardProps) {
     }
 
     return (
-      <div className="row" id={rowNumber < currentAttempt ? "show" : "hide"}>
+      <div className="row">
         <div className="cell" id={buildNameStyleId(guessedPlayer.name)}>{guessedPlayer.name}</div>
         <div className="cell" id={buildCollegeStyleId(guessedPlayer.college)}>{guessedPlayer.college}</div>
         <div className="cell" id={buildYearStyleId(guessedPlayer.year)}>{guessedPlayer.year}</div>
@@ -117,13 +103,11 @@ function Board({ board, correctPick, currentAttempt }: BoardProps) {
         <div className="cell" id="smallh">RND</div>
         <div className="cell" id="smallh">PICK</div>
       </div>
-      {Array.from({ length: 7 }, (_, index) => (
+      {board.map((player, index) => (
         <Row
-          key={index + 1}
-          guessedPlayer={buildPlayerFromBoardRow(index + 1)}
+          key={index}
+          guessedPlayer={player}
           correctPlayer={correctPick}
-          rowNumber={index + 1}
-          currentAttempt={currentAttempt}
         />
       ))}
     </div>

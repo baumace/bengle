@@ -9,22 +9,12 @@ import draftPicks from "./data/DraftPicks.json";
 import { Era } from "./components/Era";
 import { Player } from "./components/Player";
 
-const MAX_ATTEMPTS = 7;
-const INITIAL_ATTEMPT = 1;
-const DEFAULT_BOARD = [
-  ["PLAYER", "COLLEGE", "YEAR", "POS", "RND", "PICK"],
-  ["", "", "", "", "", ""],
-  ["", "", "", "", "", ""],
-  ["", "", "", "", "", ""],
-  ["", "", "", "", "", ""],
-  ["", "", "", "", "", ""],
-  ["", "", "", "", "", ""],
-  ["", "", "", "", "", ""],
-];
+const MAX_ATTEMPTS = 6;
+const INITIAL_ATTEMPT = 0;
 
 function App() {
   const [picksArray, setPicksArray] = useState<Player[]>(draftPicks);
-  const [board, setBoard] = useState([...DEFAULT_BOARD]);
+  const [board, setBoard] = useState<Player[]>([]);
   const [currAttempt, setCurrAttempt] = useState<number>(INITIAL_ATTEMPT);
   const [gameOver, setGameOver] = useState({
     gameOver: false,
@@ -38,22 +28,8 @@ function App() {
    * Selects the passed player, updating the game accordingly.
    */
   function selectPlayer(player: Player) {
-    // Store the attempt number
     const attemptNum = currAttempt;
-
-    // Store the board
-    const newBoard = [...board];
-
-    // Fill in the board's row with the player's information
-    newBoard[attemptNum][0] = player.name;
-    newBoard[attemptNum][1] = player.college;
-    newBoard[attemptNum][2] = player.year.toString();
-    newBoard[attemptNum][3] = player.position;
-    newBoard[attemptNum][4] = player.round.toString();
-    newBoard[attemptNum][5] = player.pick.toString();
-
-    // Update the board to include this new player
-    setBoard(newBoard);
+    setBoard([...board, player]);
 
     setCurrAttempt(attemptNum + 1);
 
@@ -68,7 +44,7 @@ function App() {
   }
 
   function resetGame() {
-    setBoard([...DEFAULT_BOARD]);
+    setBoard([]);
     setCurrAttempt(INITIAL_ATTEMPT);
     setGameOver({ gameOver: false, guessedPlayer: false });
   }
@@ -117,7 +93,7 @@ function App() {
         setSelectedEra={setSelectedEra}
       />
       <div className="game">
-        <Board board={board} correctPick={correctPick} currentAttempt={currAttempt} />{" "}
+        <Board board={board} correctPick={correctPick} />{" "}
         {gameOver.gameOver ? (
           <div
             className="appNewPlayerButton"
@@ -148,7 +124,7 @@ function App() {
           <p className="showResultsText">SHOW RESULTS</p>
         </div>
         <SearchBox
-          placeholder={gameOver.gameOver ? "Game Over" : `Selection ${currAttempt} of ${MAX_ATTEMPTS}`}
+          placeholder={gameOver.gameOver ? "Game Over" : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS + 1}`}
           data={picksArray}
           disabled={gameOver.gameOver}
           selectPlayer={selectPlayer}
