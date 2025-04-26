@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import "./SearchBox.css";
-import { Player } from "../Player";
+import { Player } from "../../models/Player";
 
 const STARTING_INDEX = -1;
 const EMPTY_STRING = "";

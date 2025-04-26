@@ -4,10 +4,10 @@ import SearchBox from "./components/search-box/SearchBox";
 import GameOverPopUp from "./components/pop-ups/game-over/GameOverPopUp";
 import HelpPopUp from "./components/pop-ups/help/HelpPopUp";
 import SettingsPopUp from "./components/pop-ups/settings/SettingsPopUp";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import draftPicks from "./data/DraftPicks.json";
-import { Era } from "./components/Era";
-import { Player } from "./components/Player";
+import { Era } from "./models/Era";
+import { Player } from "./models/Player";
 
 const MAX_ATTEMPTS = 6;
 const INITIAL_ATTEMPT = 0;
@@ -24,23 +24,22 @@ function App() {
   const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL);
   const [correctPick, setCorrectPick] = useState<Player>(draftPicks[Math.floor(Math.random() * draftPicks.length)]);
 
-  /*
-   * Selects the passed player, updating the game accordingly.
-   */
-  function selectPlayer(player: Player) {
-    const attemptNum = currAttempt;
-    setBoard([...board, player]);
-
-    setCurrAttempt(attemptNum + 1);
-
-    // Has the user selected the correctPick?
-    if (player === correctPick) {
-      setGameOver({ gameOver: true, guessedPlayer: true });
-      setGameOverPopupActive(true);
-    } else if (attemptNum === MAX_ATTEMPTS) {
+  useEffect(() => {
+    if (currAttempt === MAX_ATTEMPTS) {
       setGameOver({ gameOver: true, guessedPlayer: false });
       setGameOverPopupActive(true);
     }
+  }, [currAttempt]);
+
+  function selectPlayer(player: Player) {
+    setBoard([...board, player]);
+
+    if (player === correctPick) {
+      setGameOver({ gameOver: true, guessedPlayer: true });
+      setGameOverPopupActive(true);
+    }
+
+    setCurrAttempt(currAttempt + 1);
   }
 
   function resetGame() {
@@ -54,26 +53,9 @@ function App() {
     resetGame();
   };
 
-  function draftPicksFilter(player: Player, era: Era): boolean {
-    switch (era) {
-      case Era.SEVENTIES:
-        return player.year < 1980;
-      case Era.EIGHTIES:
-        return player.year >= 1980 && player.year < 1990;
-      case Era.NINETIES:
-        return player.year >= 1990 && player.year < 2000;
-      case Era.TWO_THOUSAND:
-        return player.year >= 2000 && player.year < 2010;
-      case Era.TWO_THOUSAND_TENS:
-        return player.year >= 2010;
-      default:
-        return true;
-    }
-  }
-
   const filterData = () => {
     let filteredDraftPicks = draftPicks;
-    filteredDraftPicks = filteredDraftPicks.filter((player) => draftPicksFilter(player, selectedEra));
+    filteredDraftPicks = filteredDraftPicks.filter((player) => filterPicksByEra(player, selectedEra));
     setPicksArray(filteredDraftPicks);
     return filteredDraftPicks;
   };
@@ -153,3 +135,7 @@ function App() {
 }
 
 export default App;
+
+function filterPicksByEra(player: { name: string; college: string; year: number; position: string; round: number; pick: number; }, selectedEra: Era): unknown {
+  throw new Error("Function not implemented.");
+}

@@ -3,7 +3,7 @@ import "./SettingsPopUp.css";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Era } from "../../Era";
+import { Era } from "../../../models/Era";
 
 interface SettingsPopUpProps {
   selectNewPlayer: (data: any) => void;
