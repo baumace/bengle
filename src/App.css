@@ -145,16 +145,8 @@ h2 {
 .board {
     height: 65%;
     width: 100%;
-    display: flex;
-    flex-direction: column;
     position: absolute;
     bottom: 5%;
-}
-
-.row {
-    flex: 33%;
-    display: flex;
-    flex-direction: row;
 }
 
 #show {
