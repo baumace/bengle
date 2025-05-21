@@ -22,7 +22,7 @@ function App() {
     })
     const [isGameOverPopupActive, setGameOverPopupActive] = useState(false)
     const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL)
-    const [correctPick, setCorrectPick] = useState<Player>(
+    const [correctPlayer, setCorrectPlayer] = useState<Player>(
         draftPicks[Math.floor(Math.random() * draftPicks.length)]
     )
 
@@ -35,7 +35,7 @@ function App() {
 
     useEffect(() => {
         resetGame()
-    }, [correctPick])
+    }, [correctPlayer])
 
     useEffect(() => {
         setPicksArray(
@@ -48,7 +48,7 @@ function App() {
     function selectPlayer(player: Player) {
         setBoard([...board, player])
 
-        if (player === correctPick) {
+        if (player === correctPlayer) {
             setGameOver({ gameOver: true, guessedPlayer: true })
             setGameOverPopupActive(true)
         }
@@ -63,7 +63,7 @@ function App() {
     }
 
     function setNewPlayer() {
-        setCorrectPick(
+        setCorrectPlayer(
             picksArray[Math.floor(Math.random() * picksArray.length)]
         )
     }
@@ -82,7 +82,7 @@ function App() {
                 setSelectedEra={setSelectedEra}
             />
             <div className="game">
-                <Board board={board} correctPick={correctPick} />{' '}
+                <Board board={board} correctPlayer={correctPlayer} />{' '}
                 {gameOver.gameOver ? (
                     <div
                         className="appNewPlayerButton"
@@ -136,7 +136,7 @@ function App() {
             <GameOverPopUp
                 gameOver={gameOver}
                 currAttempt={currAttempt}
-                correctPick={correctPick}
+                correctPick={correctPlayer}
                 popupActive={isGameOverPopupActive}
                 setPopupActive={setGameOverPopupActive}
             />
