@@ -1,117 +1,157 @@
-import { Player } from "../../models/Player";
-import "./Board.css";
-
-const POSITIONS = {
-  OFFENSE: ["QB", "RB", "T", "G", "C", "OL", "TE", "WR", "FB"],
-  DEFENSE: ["DT", "DE", "LB", "OLB", "ILB", "CB", "DB", "S", "SAF", "NT"],
-  ST: ["K", "P", "LS"],
-}
+import { Player } from '../../models/Player'
+import clsx from 'clsx'
 
 interface BoardProps {
-  board: Player[];
-  correctPick: Player;
+    board: Player[]
+    correctPlayer: Player
 }
 
-function Board({ board, correctPick }: BoardProps) {
-
-  interface RowProps {
-    guessedPlayer: Player;
-    correctPlayer: Player;
-  }
-
-  function Row({ guessedPlayer, correctPlayer }: RowProps) {
-
-    function buildNameStyleId(name: string): string {
-      let id = "big";
-      if (name === correctPlayer.name) {
-        id = `${id}c`;
-      }
-      return id;
+function Board({ board, correctPlayer }: BoardProps) {
+    enum CellStatus {
+        CORRECT,
+        ALMOST,
+        INCORRECT,
     }
 
-    function buildCollegeStyleId(college: string): string {
-      let id = "big";
-      if (college === correctPlayer.college) {
-        id = `${id}c`;
-      }
-      return id;
+    function getNameCellStatus(name: string): CellStatus {
+        return name === correctPlayer.name
+            ? CellStatus.CORRECT
+            : CellStatus.INCORRECT
     }
 
-    function buildYearStyleId(year: number): string {
-      let id = "small";
-      if (year === correctPlayer.year) {
-        id = `${id}c`;
-      } else if (Math.abs(correctPlayer.year - year) <= 5) {
-        id = `${id}a`;
-      }
-      return id;
+    function getCollegeCellStatus(college: string): CellStatus {
+        return college === correctPlayer.college
+            ? CellStatus.CORRECT
+            : CellStatus.INCORRECT
     }
 
-    function buildPositionStyleId(position: string): string {
-      let id = "small";
-      if (position === correctPlayer.position) {
-        id = `${id}c`;
-      } else if (POSITIONS.OFFENSE.includes(position) && POSITIONS.OFFENSE.includes(correctPlayer.position)) {
-        id = `${id}a`;
-      } else if (POSITIONS.DEFENSE.includes(position) && POSITIONS.DEFENSE.includes(correctPlayer.position)) {
-        id = `${id}a`;
-      } else if (POSITIONS.ST.includes(position) && POSITIONS.ST.includes(correctPlayer.position)) {
-        id = `${id}a`;
-      }
-      return id;
+    function getYearCellStatus(year: number): CellStatus {
+        if (year === correctPlayer.year) {
+            return CellStatus.CORRECT
+        } else if (Math.abs(correctPlayer.year - year) <= 5) {
+            return CellStatus.ALMOST
+        }
+        return CellStatus.INCORRECT
     }
 
-    function buildRoundStyleId(round: number): string {
-      let id = "small";
-      if (round === correctPlayer.round) {
-        id = `${id}c`;
-      } else if (Math.abs(correctPlayer.round - round) <= 2) {
-        id = `${id}a`;
-      }
-      return id;
+    function getPositionCellStatus(position: string): CellStatus {
+        const POSITIONS = {
+            OFFENSE: ['QB', 'RB', 'T', 'G', 'C', 'OL', 'TE', 'WR', 'FB'],
+            DEFENSE: [
+                'DT',
+                'DE',
+                'LB',
+                'OLB',
+                'ILB',
+                'CB',
+                'DB',
+                'S',
+                'SAF',
+                'NT',
+            ],
+            SPECIAL_TEAMS: ['K', 'P', 'LS'],
+        }
+
+        if (position === correctPlayer.position) {
+            return CellStatus.CORRECT
+        } else if (
+            (POSITIONS.OFFENSE.includes(position) &&
+                POSITIONS.OFFENSE.includes(correctPlayer.position)) ||
+            (POSITIONS.DEFENSE.includes(position) &&
+                POSITIONS.DEFENSE.includes(correctPlayer.position)) ||
+            (POSITIONS.SPECIAL_TEAMS.includes(position) &&
+                POSITIONS.SPECIAL_TEAMS.includes(correctPlayer.position))
+        ) {
+            return CellStatus.ALMOST
+        }
+        return CellStatus.INCORRECT
     }
 
-    function buildPickStyleId(pick: number): string {
-      let id = "small";
-      if (pick === correctPlayer.pick) {
-        id = `${id}c`;
-      } else if (Math.abs(correctPlayer.pick - pick) <= 20) {
-        id = `${id}a`;
-      }
-      return id;
+    function getRoundCellStatus(round: number): CellStatus {
+        if (round === correctPlayer.round) {
+            return CellStatus.CORRECT
+        } else if (Math.abs(correctPlayer.round - round) <= 2) {
+            return CellStatus.ALMOST
+        }
+        return CellStatus.INCORRECT
+    }
+
+    function getPickCellStatus(pick: number): CellStatus {
+        if (pick === correctPlayer.pick) {
+            return CellStatus.CORRECT
+        } else if (Math.abs(correctPlayer.pick - pick) <= 20) {
+            return CellStatus.ALMOST
+        }
+        return CellStatus.INCORRECT
+    }
+
+    interface CellProps {
+        text: string
+        status?: CellStatus
+    }
+
+    function LabelCell({ text }: CellProps) {
+        return (
+            <div className="text-sm text-orange font-extrabold uppercase border-b border-black">
+                {text}
+            </div>
+        )
+    }
+
+    function PlayerCell({ text, status }: CellProps) {
+        return (
+            <div
+                className={clsx(
+                    'text-lg text-black border border-black rounded-lg',
+                    status === CellStatus.CORRECT && 'bg-green-300',
+                    status === CellStatus.ALMOST && 'bg-yellow-200'
+                )}
+            >
+                {text}
+            </div>
+        )
     }
 
     return (
-      <div className="row">
-        <div className="cell" id={buildNameStyleId(guessedPlayer.name)}>{guessedPlayer.name}</div>
-        <div className="cell" id={buildCollegeStyleId(guessedPlayer.college)}>{guessedPlayer.college}</div>
-        <div className="cell" id={buildYearStyleId(guessedPlayer.year)}>{guessedPlayer.year}</div>
-        <div className="cell" id={buildPositionStyleId(guessedPlayer.position)}>{guessedPlayer.position}</div>
-        <div className="cell" id={buildRoundStyleId(guessedPlayer.round)}>{guessedPlayer.round}</div>
-        <div className="cell" id={buildPickStyleId(guessedPlayer.pick)}>{guessedPlayer.pick}</div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="board">
-      <div className="row">
-        <div className="cell" id="bigh">NAME</div>
-        <div className="cell" id="bigh">COLLEGE</div>
-        <div className="cell" id="smallh">YEAR</div>
-        <div className="cell" id="smallh">POS</div>
-        <div className="cell" id="smallh">RND</div>
-        <div className="cell" id="smallh">PICK</div>
-      </div>
-      {board.map((player, index) => (
-        <Row
-          key={index}
-          guessedPlayer={player}
-          correctPlayer={correctPick}
-        />
-      ))}
-    </div>
-  );
+        <div className="absolute w-full bottom-[5%] grid grid-cols-[3fr_3fr_1fr_1fr_1fr_1fr] gap-3">
+            <>
+                <LabelCell text="name" />
+                <LabelCell text="college" />
+                <LabelCell text="year" />
+                <LabelCell text="pos" />
+                <LabelCell text="rnd" />
+                <LabelCell text="pick" />
+            </>
+            {board.map((player) => (
+                <>
+                    <PlayerCell
+                        text={player.name}
+                        status={getNameCellStatus(player.name)}
+                    />
+                    <PlayerCell
+                        text={player.college}
+                        status={getCollegeCellStatus(player.college)}
+                    />
+                    <PlayerCell
+                        text={player.year.toString()}
+                        status={getYearCellStatus(player.year)}
+                    />
+                    <PlayerCell
+                        text={player.position}
+                        status={getPositionCellStatus(player.position)}
+                    />
+                    <PlayerCell
+                        text={player.round.toString()}
+                        status={getRoundCellStatus(player.round)}
+                    />
+                    <PlayerCell
+                        text={player.pick.toString()}
+                        status={getPickCellStatus(player.pick)}
+                    />
+                </>
+            ))}
+        </div>
+    )
 }
 
-export default Board;
+export default Board
