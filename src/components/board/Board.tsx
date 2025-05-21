@@ -121,12 +121,15 @@ function Board({ board, correctPick }: BoardProps) {
         )
     }
 
+    const classes =
+        'bg-red-500 m-[5px] grid place-items-center text-[18px] text-black border border-black relative rounded-[10px] ' +
+        'm-[6px] h-[45%] w-[30%] text-[14px] font-extrabold text-[#fb4f14] border-none border-b border-black bottom-[-35%] rounded-none'
+
     return (
         <div className="board">
             <div className="row">
-                <div className="cell" id="bigh">
-                    NAME
-                </div>
+                {/*<div className="cell" id="bigh">*/}
+                <div className={classes}>NAME</div>
                 <div className="cell" id="bigh">
                     COLLEGE
                 </div>
