@@ -1,15 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
-import './SearchBox.css'
 import { Player } from '../../models/Player'
+import clsx from 'clsx'
 
 const STARTING_INDEX = -1
 const EMPTY_STRING = ''
-
-enum Key {
-    ENTER = 'Enter',
-    ARROW_DOWN = 'ArrowDown',
-    ARROW_UP = 'ArrowUp',
-}
 
 interface SearchBoxProps {
     placeholder: string
@@ -29,7 +23,6 @@ function SearchBox({
         useState(STARTING_INDEX)
     const [searchInput, setSearchInput] = useState(EMPTY_STRING)
 
-    // search input changes
     useEffect(() => {
         let filteredAutofillOptions: Player[] = []
         setAutofillOptionIndex(STARTING_INDEX)
@@ -57,11 +50,11 @@ function SearchBox({
         (event: KeyboardEvent) => {
             if (autofillOptions.length > 0) {
                 if (
-                    event.key === Key.ENTER &&
+                    event.key === 'Enter' &&
                     autofillOptionIndex !== STARTING_INDEX
                 ) {
                     handlePlayerSelection(autofillOptions[autofillOptionIndex])
-                } else if (event.key === Key.ARROW_DOWN) {
+                } else if (event.key === 'ArrowDown') {
                     event.preventDefault()
 
                     // handle edge case to loop back to search text
@@ -72,7 +65,7 @@ function SearchBox({
                             (autofillOptionIndex + 1) % autofillOptions.length
                         )
                     }
-                } else if (event.key === Key.ARROW_UP) {
+                } else if (event.key === 'ArrowUp') {
                     event.preventDefault()
 
                     // handle edge case to loop from search text to last option and loop back to search text
@@ -101,35 +94,36 @@ function SearchBox({
     }, [handleKeyboard])
 
     return (
-        <div className="searchBox">
-            <div className="searchInput">
-                <input
-                    type="text"
-                    className="searchInputText"
-                    id={autofillOptions.length !== 0 ? 'active' : 'inactive'}
-                    value={
-                        autofillOptionIndex === STARTING_INDEX
-                            ? searchInput
-                            : autofillOptions[autofillOptionIndex].name
-                    }
-                    placeholder={placeholder}
-                    onChange={(event) => setSearchInput(event.target.value)}
-                    disabled={disabled}
-                />
-            </div>
+        <div className="absolute top-[17%]">
+            <input
+                type="text"
+                className={clsx(
+                    'bg-white border-2 border-black text-lg text-orange p-2 focus:outline-none',
+                    autofillOptions.length !== 0
+                        ? 'rounded-tr-lg rounded-tl-lg'
+                        : 'rounded-lg'
+                )}
+                value={
+                    autofillOptionIndex === STARTING_INDEX
+                        ? searchInput
+                        : autofillOptions[autofillOptionIndex].name
+                }
+                placeholder={placeholder}
+                onChange={(event) => setSearchInput(event.target.value)}
+                disabled={disabled}
+            />
             {autofillOptions.length > 0 && (
-                <div className="searchResult">
+                <div className="text-orange bg-white border-2 border-black border-t-0 overflow-scroll max-h-[250px] rounded-bl-lg rounded-br-lg">
                     {autofillOptions.map((player, index) => {
                         return (
                             <div
-                                className="dataItem"
+                                className={clsx(
+                                    'p-2 hover:bg-orange/10',
+                                    autofillOptionIndex === index &&
+                                        'bg-orange/10'
+                                )}
                                 onClick={() => handlePlayerSelection(player)}
                                 key={index}
-                                id={
-                                    autofillOptionIndex === index
-                                        ? 'itemSelected'
-                                        : 'itemNotSelected'
-                                }
                             >
                                 <p>{player.name}</p>
                             </div>
