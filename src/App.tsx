@@ -71,50 +71,57 @@ function App() {
     }
 
     return (
-        <div className="App">
-            <header>
-                <h1>BENGLE</h1>
-                <h2>Bengals Draft Day Selections</h2>
+        <div className="text-center relative h-full w-full m-6">
+            <header className="p-4">
+                <div className="font-extrabold text-4xl">BENGLE</div>
+                <div className="font-semibold text-md">
+                    Bengals Draft Day Selections
+                </div>
             </header>
-            <HelpPopUp />
-            <SettingsPopUp
-                setNewPlayer={setNewPlayer}
-                resetGame={resetGame}
-                selectedEra={selectedEra}
-                setSelectedEra={setSelectedEra}
-            />
-            <div className="game">
-                <Board board={board} correctPlayer={correctPlayer} />{' '}
-                {gameOver.gameOver ? (
-                    <Button text="new player" fn={() => setNewPlayer()} />
-                ) : (
-                    <Button
-                        text="give up"
-                        fn={() => {
-                            setGameOver({
-                                gameOver: true,
-                                guessedPlayer: false,
-                            })
-                            setGameOverPopupActive(true)
-                        }}
+            <div className="mx-[20%] grid grid-cols-1 gap-4">
+                <div className="w-full grid grid-cols-[1fr_2fr_1fr] gap-2">
+                    {gameOver.gameOver ? (
+                        <Button
+                            text="new player"
+                            fn={() => setNewPlayer()}
+                            classes="justify-self-end place-self-center"
+                        />
+                    ) : (
+                        <Button
+                            text="give up"
+                            fn={() => {
+                                setGameOver({
+                                    gameOver: true,
+                                    guessedPlayer: false,
+                                })
+                                setGameOverPopupActive(true)
+                            }}
+                            classes="justify-self-end place-self-center"
+                        />
+                    )}
+                    <SearchBox
+                        placeholder={
+                            gameOver.gameOver
+                                ? 'Game Over'
+                                : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`
+                        }
+                        data={picksArray}
+                        disabled={gameOver.gameOver}
+                        selectPlayer={selectPlayer}
                     />
-                )}
-                <Button
-                    text="show results"
-                    fn={() => setGameOverPopupActive(true)}
-                    classes={clsx(gameOver.gameOver ? 'visible' : 'hidden')}
-                />
-                <SearchBox
-                    placeholder={
-                        gameOver.gameOver
-                            ? 'Game Over'
-                            : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`
-                    }
-                    data={picksArray}
-                    disabled={gameOver.gameOver}
-                    selectPlayer={selectPlayer}
-                />
+                    <Button
+                        text="show results"
+                        fn={() => setGameOverPopupActive(true)}
+                        classes={clsx(
+                            gameOver.gameOver ? 'visible' : 'hidden',
+                            'justify-self-start place-self-center'
+                        )}
+                    />
+                </div>
+                <Board board={board} correctPlayer={correctPlayer} />{' '}
             </div>
+            {/*  TODO: Change the footer references into a references pop-up */}
+            {/*
             <footer>
                 <p>
                     Data Source:{' '}
@@ -126,6 +133,16 @@ function App() {
                     Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
                 </p>
             </footer>
+            */}
+            <div className="absolute left-0 top-0 grid grid-cols-2 gap-2">
+                <HelpPopUp />
+                <SettingsPopUp
+                    setNewPlayer={setNewPlayer}
+                    resetGame={resetGame}
+                    selectedEra={selectedEra}
+                    setSelectedEra={setSelectedEra}
+                />
+            </div>
             <GameOverPopUp
                 gameOver={gameOver}
                 currAttempt={currAttempt}
