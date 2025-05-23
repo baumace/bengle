@@ -3,8 +3,9 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { Era } from '../../models/Era'
-import { Button } from '../button/Button'
+import { Button, IconButton } from '../button/Button'
 import { clsx } from 'clsx'
+import PopUp from './PopUp'
 
 interface SettingsPopUpProps {
     setNewPlayer: () => void
@@ -104,47 +105,28 @@ function SettingsPopUp({
 
     return (
         <>
-            <button
-                className="headerButton"
-                id="settingsButton"
-                onClick={() => setVisibility(true)}
-            >
-                <SettingsIcon className="headerButtonIcon" />
-            </button>
-            <div id={isVisible ? 'show' : 'hide'}>
-                <div className="popupWall" />
-                <div className="popup p-12">
-                    <button
-                        className="exitButton"
-                        onClick={() =>
-                            handleExitingClick(ExitClickSource.OTHER)
-                        }
-                    >
-                        X
-                    </button>
-                    <div className="grid grid-cols-1 gap-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <Button
-                                text="new player"
-                                fn={() =>
-                                    handleExitingClick(
-                                        ExitClickSource.NEW_PLAYER
-                                    )
-                                }
-                            />
-                            <Button
-                                text="reset board"
-                                fn={() =>
-                                    handleExitingClick(
-                                        ExitClickSource.RESET_BOARD
-                                    )
-                                }
-                            />
-                        </div>
-                        <EraDropdown />
+            <IconButton fn={() => setVisibility(true)}>
+                <SettingsIcon />
+            </IconButton>
+            <PopUp isVisible={isVisible} setIsVisible={setVisibility}>
+                <div className="grid grid-cols-1 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
+                        <Button
+                            text="new player"
+                            fn={() =>
+                                handleExitingClick(ExitClickSource.NEW_PLAYER)
+                            }
+                        />
+                        <Button
+                            text="reset board"
+                            fn={() =>
+                                handleExitingClick(ExitClickSource.RESET_BOARD)
+                            }
+                        />
                     </div>
+                    <EraDropdown />
                 </div>
-            </div>
+            </PopUp>
         </>
     )
 }

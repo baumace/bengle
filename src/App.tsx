@@ -71,21 +71,14 @@ function App() {
     }
 
     return (
-        <div className="text-center h-full w-full">
-            <header>
-                <h1>BENGLE</h1>
-                <h2>Bengals Draft Day Selections</h2>
-                <div className="flex absolute left-0 top-0">
-                    <HelpPopUp />
-                    <SettingsPopUp
-                        setNewPlayer={setNewPlayer}
-                        resetGame={resetGame}
-                        selectedEra={selectedEra}
-                        setSelectedEra={setSelectedEra}
-                    />
+        <div className="text-center relative h-full w-full m-6">
+            <header className="p-4">
+                <div className="font-extrabold text-4xl">BENGLE</div>
+                <div className="font-semibold text-md">
+                    Bengals Draft Day Selections
                 </div>
             </header>
-            <div className="game grid grid-cols-1 gap-4">
+            <div className="mx-[20%] grid grid-cols-1 gap-4">
                 <div className="w-full grid grid-cols-[1fr_2fr_1fr] gap-2">
                     {gameOver.gameOver ? (
                         <Button
@@ -127,6 +120,8 @@ function App() {
                 </div>
                 <Board board={board} correctPlayer={correctPlayer} />{' '}
             </div>
+            {/*  TODO: Change the footer references into a references pop-up */}
+            {/*
             <footer>
                 <p>
                     Data Source:{' '}
@@ -138,6 +133,16 @@ function App() {
                     Inspired by <a href="https://poeltl.dunk.town/">Poeltl</a>
                 </p>
             </footer>
+            */}
+            <div className="absolute left-0 top-0 grid grid-cols-2 gap-2">
+                <HelpPopUp />
+                <SettingsPopUp
+                    setNewPlayer={setNewPlayer}
+                    resetGame={resetGame}
+                    selectedEra={selectedEra}
+                    setSelectedEra={setSelectedEra}
+                />
+            </div>
             <GameOverPopUp
                 gameOver={gameOver}
                 currAttempt={currAttempt}

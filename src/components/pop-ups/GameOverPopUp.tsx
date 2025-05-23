@@ -1,4 +1,6 @@
+import { clsx } from 'clsx'
 import { Player } from '../../models/Player'
+import PopUp from './PopUp'
 
 interface GameOverPopUpProps {
     gameOver: { guessedPlayer: boolean }
@@ -38,31 +40,19 @@ function GameOverPopUp({
     }
 
     return (
-        <div id={popupActive ? 'show' : 'hide'}>
-            <div className="popupWall" />
-            <div className="popup p-12">
-                <button
-                    className="exitButton"
-                    onClick={() => {
-                        setPopupActive(false)
-                    }}
-                >
-                    X
-                </button>
-                <div className="font-lg">
-                    {gameOver.guessedPlayer ? <WinScreen /> : <LoseScreen />}
-                    <p>
-                        The correct player is {correctPick.name},{' '}
-                        {correctPick.position} from {correctPick.college}.
-                    </p>
-                    <p>
-                        Selected with the #{correctPick.pick} overall pick in
-                        round {correctPick.round} of the {correctPick.year} NFL
-                        Draft
-                    </p>
-                </div>
+        <PopUp isVisible={popupActive} setIsVisible={setPopupActive}>
+            <div className="font-lg">
+                {gameOver.guessedPlayer ? <WinScreen /> : <LoseScreen />}
+                <p>
+                    The correct player is {correctPick.name},{' '}
+                    {correctPick.position} from {correctPick.college}.
+                </p>
+                <p>
+                    Selected with the #{correctPick.pick} overall pick in round{' '}
+                    {correctPick.round} of the {correctPick.year} NFL Draft
+                </p>
             </div>
-        </div>
+        </PopUp>
     )
 }
 
