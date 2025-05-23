@@ -11,11 +11,11 @@ export function Button({ text, fn, classes }: ButtonProps) {
         <button
             className={clsx(
                 classes,
-                'border-2 border-black font-extrabold bg-orange text-white rounded-lg hover:bg-orange/50'
+                'w-fit h-fit border-2 border-black font-extrabold bg-orange text-white rounded-lg hover:bg-orange/50'
             )}
             onClick={fn}
         >
-            <p className="p-1 uppercase">{text}</p>
+            <p className="px-4 py-1 uppercase">{text}</p>
         </button>
     )
 }

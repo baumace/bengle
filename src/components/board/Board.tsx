@@ -113,7 +113,7 @@ function Board({ board, correctPlayer }: BoardProps) {
     }
 
     return (
-        <div className="absolute w-full bottom-[5%] grid grid-cols-[3fr_3fr_1fr_1fr_1fr_1fr] gap-3">
+        <div className="w-full grid grid-cols-[3fr_3fr_1fr_1fr_1fr_1fr] gap-3">
             <>
                 <LabelCell text="name" />
                 <LabelCell text="college" />

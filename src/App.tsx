@@ -71,49 +71,61 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <div className="text-center h-full w-full">
             <header>
                 <h1>BENGLE</h1>
                 <h2>Bengals Draft Day Selections</h2>
-            </header>
-            <HelpPopUp />
-            <SettingsPopUp
-                setNewPlayer={setNewPlayer}
-                resetGame={resetGame}
-                selectedEra={selectedEra}
-                setSelectedEra={setSelectedEra}
-            />
-            <div className="game">
-                <Board board={board} correctPlayer={correctPlayer} />{' '}
-                {gameOver.gameOver ? (
-                    <Button text="new player" fn={() => setNewPlayer()} />
-                ) : (
-                    <Button
-                        text="give up"
-                        fn={() => {
-                            setGameOver({
-                                gameOver: true,
-                                guessedPlayer: false,
-                            })
-                            setGameOverPopupActive(true)
-                        }}
+                <div className="flex absolute left-0 top-0">
+                    <HelpPopUp />
+                    <SettingsPopUp
+                        setNewPlayer={setNewPlayer}
+                        resetGame={resetGame}
+                        selectedEra={selectedEra}
+                        setSelectedEra={setSelectedEra}
                     />
-                )}
-                <Button
-                    text="show results"
-                    fn={() => setGameOverPopupActive(true)}
-                    classes={clsx(gameOver.gameOver ? 'visible' : 'hidden')}
-                />
-                <SearchBox
-                    placeholder={
-                        gameOver.gameOver
-                            ? 'Game Over'
-                            : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`
-                    }
-                    data={picksArray}
-                    disabled={gameOver.gameOver}
-                    selectPlayer={selectPlayer}
-                />
+                </div>
+            </header>
+            <div className="game grid grid-cols-1 gap-4">
+                <div className="w-full grid grid-cols-[1fr_2fr_1fr] gap-2">
+                    {gameOver.gameOver ? (
+                        <Button
+                            text="new player"
+                            fn={() => setNewPlayer()}
+                            classes="justify-self-end place-self-center"
+                        />
+                    ) : (
+                        <Button
+                            text="give up"
+                            fn={() => {
+                                setGameOver({
+                                    gameOver: true,
+                                    guessedPlayer: false,
+                                })
+                                setGameOverPopupActive(true)
+                            }}
+                            classes="justify-self-end place-self-center"
+                        />
+                    )}
+                    <SearchBox
+                        placeholder={
+                            gameOver.gameOver
+                                ? 'Game Over'
+                                : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`
+                        }
+                        data={picksArray}
+                        disabled={gameOver.gameOver}
+                        selectPlayer={selectPlayer}
+                    />
+                    <Button
+                        text="show results"
+                        fn={() => setGameOverPopupActive(true)}
+                        classes={clsx(
+                            gameOver.gameOver ? 'visible' : 'hidden',
+                            'justify-self-start place-self-center'
+                        )}
+                    />
+                </div>
+                <Board board={board} correctPlayer={correctPlayer} />{' '}
             </div>
             <footer>
                 <p>
