@@ -1,13 +1,15 @@
 import './App.css'
 import Board from './components/board/Board'
 import SearchBox from './components/search-box/SearchBox'
-import GameOverPopUp from './components/pop-ups/game-over/GameOverPopUp'
-import HelpPopUp from './components/pop-ups/help/HelpPopUp'
-import SettingsPopUp from './components/pop-ups/settings/SettingsPopUp'
+import GameOverPopUp from './components/pop-ups/GameOverPopUp'
+import HelpPopUp from './components/pop-ups/HelpPopUp'
+import SettingsPopUp from './components/pop-ups/SettingsPopUp'
 import { useEffect, useState } from 'react'
 import draftPicks from './data/DraftPicks.json'
 import { Era, filterPlayersByEra } from './models/Era'
 import { Player } from './models/Player'
+import { Button } from './components/button/Button'
+import { clsx } from 'clsx'
 
 const MAX_ATTEMPTS = 7
 const INITIAL_ATTEMPT = 0
@@ -84,33 +86,24 @@ function App() {
             <div className="game">
                 <Board board={board} correctPlayer={correctPlayer} />{' '}
                 {gameOver.gameOver ? (
-                    <div
-                        className="appNewPlayerButton"
-                        onClick={() => setNewPlayer()}
-                    >
-                        <p className="appNewPlayerText">NEW PLAYER</p>
-                    </div>
+                    <Button text="new player" fn={() => setNewPlayer()} />
                 ) : (
-                    <div
-                        className="giveUpButton"
-                        onClick={() => {
+                    <Button
+                        text="give up"
+                        fn={() => {
                             setGameOver({
                                 gameOver: true,
                                 guessedPlayer: false,
                             })
                             setGameOverPopupActive(true)
                         }}
-                    >
-                        <p className="giveUpText">GIVE UP</p>
-                    </div>
+                    />
                 )}
-                <div
-                    className="showResultsButton"
-                    onClick={() => setGameOverPopupActive(true)}
-                    id={gameOver.gameOver ? 'show' : 'hide'}
-                >
-                    <p className="showResultsText">SHOW RESULTS</p>
-                </div>
+                <Button
+                    text="show results"
+                    fn={() => setGameOverPopupActive(true)}
+                    classes={clsx(gameOver.gameOver ? 'visible' : 'hidden')}
+                />
                 <SearchBox
                     placeholder={
                         gameOver.gameOver

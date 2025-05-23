@@ -1,5 +1,4 @@
-import { Player } from '../../../models/Player'
-import './GameOverPopUp.css'
+import { Player } from '../../models/Player'
 
 interface GameOverPopUpProps {
     gameOver: { guessedPlayer: boolean }
@@ -41,7 +40,7 @@ function GameOverPopUp({
     return (
         <div id={popupActive ? 'show' : 'hide'}>
             <div className="popupWall" />
-            <div className="popup" id="gameOverPopup">
+            <div className="popup p-12">
                 <button
                     className="exitButton"
                     onClick={() => {
@@ -50,7 +49,7 @@ function GameOverPopUp({
                 >
                     X
                 </button>
-                <div className="gameOverText">
+                <div className="font-lg">
                     {gameOver.guessedPlayer ? <WinScreen /> : <LoseScreen />}
                     <p>
                         The correct player is {correctPick.name},{' '}
