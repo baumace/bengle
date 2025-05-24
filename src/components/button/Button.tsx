@@ -7,7 +7,7 @@ interface ButtonProps {
     children: ReactNode
 }
 
-export function Button({ fn, classes, children }: ButtonProps) {
+function Button({ fn, classes, children }: ButtonProps) {
     return (
         <button
             className={clsx(
@@ -23,13 +23,7 @@ export function Button({ fn, classes, children }: ButtonProps) {
     )
 }
 
-interface IconButtonProps {
-    fn: () => void
-    classes?: string
-    children?: ReactNode
-}
-
-export function IconButton({ fn, classes, children }: IconButtonProps) {
+function IconButton({ fn, classes, children }: ButtonProps) {
     return (
         <button
             className={clsx(
@@ -42,3 +36,5 @@ export function IconButton({ fn, classes, children }: IconButtonProps) {
         </button>
     )
 }
+
+export { Button, IconButton }
