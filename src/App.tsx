@@ -82,7 +82,7 @@ function App() {
     }
 
     return (
-        <div className="text-center h-dvh w-dvw bg-white dark:bg-zinc-900 text-black dark:text-white/80 [&_*]:border-black/20 [&_*]:dark:border-white/20">
+        <div className="font-mono text-center h-dvh w-dvw bg-white dark:bg-zinc-900 text-black dark:text-white/80 [&_*]:border-black/20 [&_*]:dark:border-white/20">
             <header className="absolute left-6 top-6 grid grid-cols-3 gap-2">
                 <IconButton fn={() => setReferencesPopupActive(true)}>
                     <MenuBookIcon />
