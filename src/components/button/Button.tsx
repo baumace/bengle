@@ -2,37 +2,33 @@ import clsx from 'clsx'
 import { ReactNode } from 'react'
 
 interface ButtonProps {
-    text: string
     fn: () => void
     classes?: string
+    children: ReactNode
 }
 
-export function Button({ text, fn, classes }: ButtonProps) {
+function Button({ fn, classes, children }: ButtonProps) {
     return (
         <button
             className={clsx(
                 classes,
-                'w-fit h-fit border-2 border-black font-extrabold bg-orange text-white rounded-lg hover:bg-orange/50'
+                'w-fit h-fit font-extrabold bg-orange text-white rounded-lg overflow-hidden'
             )}
             onClick={fn}
         >
-            <p className="px-4 py-1 uppercase">{text}</p>
+            <div className="bg-black/0 hover:bg-black/20">
+                <p className="px-4 py-2 uppercase">{children}</p>
+            </div>
         </button>
     )
 }
 
-interface IconButtonProps {
-    fn: () => void
-    classes?: string
-    children?: ReactNode
-}
-
-export function IconButton({ fn, classes, children }: IconButtonProps) {
+function IconButton({ fn, classes, children }: ButtonProps) {
     return (
         <button
             className={clsx(
                 classes,
-                'size-10 text-black hover:text-orange [&>*]:scale-150'
+                'size-10 hover:text-orange [&>*]:scale-150 rounded-full'
             )}
             onClick={fn}
         >
@@ -40,3 +36,5 @@ export function IconButton({ fn, classes, children }: IconButtonProps) {
         </button>
     )
 }
+
+export { Button, IconButton }

@@ -98,7 +98,7 @@ function SearchBox({
             <input
                 type="text"
                 className={clsx(
-                    'bg-white w-full border-2 border-black text-lg text-orange p-2 focus:outline-none placeholder:text-orange/50',
+                    'bg-white dark:bg-zinc-900 w-full border text-lg text-orange p-2 focus:outline-none placeholder:text-orange/50',
                     autofillOptions.length !== 0
                         ? 'rounded-tr-lg rounded-tl-lg'
                         : 'rounded-lg'
@@ -113,12 +113,12 @@ function SearchBox({
                 disabled={disabled}
             />
             {autofillOptions.length > 0 && (
-                <div className="absolute w-full text-left text-orange bg-white border-2 border-black border-t-0 overflow-scroll max-h-[250px] rounded-bl-lg rounded-br-lg">
+                <div className="absolute w-full text-lg text-left text-orange bg-white dark:bg-zinc-900 border border-t-0 overflow-scroll max-h-[250px] rounded-bl-lg rounded-br-lg">
                     {autofillOptions.map((player, index) => {
                         return (
                             <div
                                 className={clsx(
-                                    'p-2 hover:bg-orange/10 cursor-pointer',
+                                    'p-3 hover:bg-orange/10 cursor-pointer',
                                     autofillOptionIndex === index &&
                                         'bg-orange/10'
                                 )}

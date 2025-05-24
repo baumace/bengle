@@ -13,6 +13,71 @@ function Board({ board, correctPlayer }: BoardProps) {
         INCORRECT,
     }
 
+    return (
+        <div className="w-full grid grid-cols-[3fr_3fr_1fr_1fr_1fr_1fr] gap-3">
+            <>
+                <LabelCell text="name" />
+                <LabelCell text="college" />
+                <LabelCell text="year" />
+                <LabelCell text="pos" />
+                <LabelCell text="rnd" />
+                <LabelCell text="pick" />
+            </>
+            {board.map((player) => (
+                <>
+                    <PlayerCell
+                        text={player.name}
+                        status={getNameCellStatus(player.name)}
+                    />
+                    <PlayerCell
+                        text={player.college}
+                        status={getCollegeCellStatus(player.college)}
+                    />
+                    <PlayerCell
+                        text={player.year.toString()}
+                        status={getYearCellStatus(player.year)}
+                    />
+                    <PlayerCell
+                        text={player.position}
+                        status={getPositionCellStatus(player.position)}
+                    />
+                    <PlayerCell
+                        text={player.round.toString()}
+                        status={getRoundCellStatus(player.round)}
+                    />
+                    <PlayerCell
+                        text={player.pick.toString()}
+                        status={getPickCellStatus(player.pick)}
+                    />
+                </>
+            ))}
+        </div>
+    )
+
+    function LabelCell({ text }: CellProps) {
+        return (
+            <div className="text-sm text-orange p-1 font-extrabold uppercase border-b">
+                {text}
+            </div>
+        )
+    }
+
+    function PlayerCell({ text, status }: CellProps) {
+        return (
+            <div
+                className={clsx(
+                    'text-lg font-bold py-1 border rounded-lg',
+                    status === CellStatus.CORRECT &&
+                        'bg-green-300 dark:bg-green-700',
+                    status === CellStatus.ALMOST &&
+                        'bg-yellow-200 dark:bg-yellow-600'
+                )}
+            >
+                {text}
+            </div>
+        )
+    }
+
     function getNameCellStatus(name: string): CellStatus {
         return name === correctPlayer.name
             ? CellStatus.CORRECT
@@ -84,74 +149,10 @@ function Board({ board, correctPlayer }: BoardProps) {
         }
         return CellStatus.INCORRECT
     }
-
     interface CellProps {
         text: string
         status?: CellStatus
     }
-
-    function LabelCell({ text }: CellProps) {
-        return (
-            <div className="text-sm text-orange font-extrabold uppercase border-b border-black">
-                {text}
-            </div>
-        )
-    }
-
-    function PlayerCell({ text, status }: CellProps) {
-        return (
-            <div
-                className={clsx(
-                    'text-lg text-black border border-black rounded-lg',
-                    status === CellStatus.CORRECT && 'bg-green-300',
-                    status === CellStatus.ALMOST && 'bg-yellow-200'
-                )}
-            >
-                {text}
-            </div>
-        )
-    }
-
-    return (
-        <div className="w-full grid grid-cols-[3fr_3fr_1fr_1fr_1fr_1fr] gap-3">
-            <>
-                <LabelCell text="name" />
-                <LabelCell text="college" />
-                <LabelCell text="year" />
-                <LabelCell text="pos" />
-                <LabelCell text="rnd" />
-                <LabelCell text="pick" />
-            </>
-            {board.map((player) => (
-                <>
-                    <PlayerCell
-                        text={player.name}
-                        status={getNameCellStatus(player.name)}
-                    />
-                    <PlayerCell
-                        text={player.college}
-                        status={getCollegeCellStatus(player.college)}
-                    />
-                    <PlayerCell
-                        text={player.year.toString()}
-                        status={getYearCellStatus(player.year)}
-                    />
-                    <PlayerCell
-                        text={player.position}
-                        status={getPositionCellStatus(player.position)}
-                    />
-                    <PlayerCell
-                        text={player.round.toString()}
-                        status={getRoundCellStatus(player.round)}
-                    />
-                    <PlayerCell
-                        text={player.pick.toString()}
-                        status={getPickCellStatus(player.pick)}
-                    />
-                </>
-            ))}
-        </div>
-    )
 }
 
 export default Board
