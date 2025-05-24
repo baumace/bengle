@@ -12,6 +12,7 @@ import SearchBox from './components/search-box/SearchBox'
 import { Button, IconButton } from './components/button/Button'
 import PopUp from './components/pop-up/PopUp'
 import { Dropdown, DropdownItem } from './components/dropdown/Dropdown'
+import Tooltip from './components/tooltip/Tooltip'
 
 const MAX_ATTEMPTS = 7
 const INITIAL_ATTEMPT = 0
@@ -83,16 +84,22 @@ function App() {
 
     return (
         <div className="font-mono text-center h-dvh w-dvw bg-white dark:bg-zinc-900 text-black dark:text-white/80 [&_*]:border-black/20 [&_*]:dark:border-white/20">
-            <header className="absolute left-6 top-6 grid grid-cols-3 gap-2">
-                <IconButton fn={() => setReferencesPopupActive(true)}>
-                    <MenuBookIcon />
-                </IconButton>
-                <IconButton fn={() => setHelpPopupActive(true)}>
-                    <HelpIcon />
-                </IconButton>
-                <IconButton fn={() => setSettingsPopupActive(true)}>
-                    <SettingsIcon />
-                </IconButton>
+            <header className="absolute left-12 top-6 grid grid-cols-3 gap-2">
+                <Tooltip content="References">
+                    <IconButton fn={() => setReferencesPopupActive(true)}>
+                        <MenuBookIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip content="Help">
+                    <IconButton fn={() => setHelpPopupActive(true)}>
+                        <HelpIcon />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip content="Settings">
+                    <IconButton fn={() => setSettingsPopupActive(true)}>
+                        <SettingsIcon />
+                    </IconButton>
+                </Tooltip>
             </header>
             <main className="mx-[20%] pt-6 grid grid-cols-1 gap-8">
                 <div>
