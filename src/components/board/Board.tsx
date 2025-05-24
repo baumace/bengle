@@ -56,7 +56,7 @@ function Board({ board, correctPlayer }: BoardProps) {
 
     function LabelCell({ text }: CellProps) {
         return (
-            <div className="text-sm text-orange font-extrabold uppercase border-b border-black">
+            <div className="text-sm text-orange p-1 font-extrabold uppercase border-b">
                 {text}
             </div>
         )
@@ -66,9 +66,11 @@ function Board({ board, correctPlayer }: BoardProps) {
         return (
             <div
                 className={clsx(
-                    'text-lg py-1 text-black border border-black rounded-lg',
-                    status === CellStatus.CORRECT && 'bg-green-300',
-                    status === CellStatus.ALMOST && 'bg-yellow-200'
+                    'text-lg font-bold py-1 border rounded-lg',
+                    status === CellStatus.CORRECT &&
+                        'bg-green-300 dark:bg-green-700',
+                    status === CellStatus.ALMOST &&
+                        'bg-yellow-200 dark:bg-yellow-600'
                 )}
             >
                 {text}

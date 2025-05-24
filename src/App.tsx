@@ -82,7 +82,7 @@ function App() {
     }
 
     return (
-        <div className="text-center w-dvw">
+        <div className="text-center h-dvh w-dvw bg-white dark:bg-zinc-900 text-black dark:text-white/80 [&_*]:border-black/20 [&_*]:dark:border-white/20">
             <header className="absolute left-6 top-6 grid grid-cols-3 gap-2">
                 <IconButton fn={() => setReferencesPopupActive(true)}>
                     <MenuBookIcon />
@@ -94,7 +94,7 @@ function App() {
                     <SettingsIcon />
                 </IconButton>
             </header>
-            <main className="mx-[20%] mt-6 grid grid-cols-1 gap-8">
+            <main className="mx-[20%] pt-6 grid grid-cols-1 gap-8">
                 <div>
                     <div className="font-extrabold text-4xl">BENGLE</div>
                     <div className="font-semibold text-md">
@@ -172,26 +172,41 @@ function App() {
                             find your draft gem
                         </li>
                         <li className="p-2">
-                            A <mark className="bg-green-300">green box</mark>{' '}
+                            A{' '}
+                            <mark className="bg-green-300 dark:bg-green-700">
+                                green box
+                            </mark>{' '}
                             means that the information is correct
                         </li>
                         <li className="p-2">
-                            A <mark className="bg-yellow-200">yellow box</mark>{' '}
+                            A{' '}
+                            <mark className="bg-yellow-200 dark:bg-yellow-600">
+                                yellow box
+                            </mark>{' '}
                             for the year means the correct player is within 5
                             years
                         </li>
                         <li className="p-2">
-                            A <mark className="bg-yellow-200">yellow box</mark>{' '}
+                            A{' '}
+                            <mark className="bg-yellow-200 dark:bg-yellow-600">
+                                yellow box
+                            </mark>{' '}
                             for the position means the correct player is on the
                             same unit
                         </li>
                         <li className="p-2">
-                            A <mark className="bg-yellow-200">yellow box</mark>{' '}
+                            A{' '}
+                            <mark className="bg-yellow-200 dark:bg-yellow-600">
+                                yellow box
+                            </mark>{' '}
                             for the round means the correct player is within 2
                             rounds
                         </li>
                         <li className="p-2">
-                            A <mark className="bg-yellow-200">yellow box</mark>{' '}
+                            A{' '}
+                            <mark className="bg-yellow-200 dark:bg-yellow-600">
+                                yellow box
+                            </mark>{' '}
                             on the picks means the correct player is within 20
                             picks
                         </li>

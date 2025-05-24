@@ -42,7 +42,7 @@ export function Dropdown({ text, children }: DropdownProps) {
             </Button>
             <div
                 className={clsx(
-                    'absolute mt-1 w-full border-2 border-black bg-white rounded-lg',
+                    'absolute mt-1 w-full border-2 bg-white dark:bg-black rounded-lg',
                     dropdownActive ? 'visible' : 'hidden'
                 )}
             >

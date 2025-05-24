@@ -28,7 +28,7 @@ function IconButton({ fn, classes, children }: ButtonProps) {
         <button
             className={clsx(
                 classes,
-                'size-10 text-black hover:text-orange [&>*]:scale-150 rounded-full'
+                'size-10 hover:text-orange [&>*]:scale-150 rounded-full'
             )}
             onClick={fn}
         >

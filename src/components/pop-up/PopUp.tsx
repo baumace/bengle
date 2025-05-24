@@ -12,10 +12,10 @@ function PopUp({ isVisible, setIsVisible, children }: PopUpProps) {
         <div
             className={clsx(
                 isVisible ? 'visible' : 'hidden',
-                'z-99 fixed left-0 top-0 h-dvh w-dvw bg-black/40 grid place-items-center justify-items-center'
+                'z-99 fixed left-0 top-0 h-dvh w-dvw bg-black/40 dark:bg-white/20 grid place-items-center justify-items-center'
             )}
         >
-            <div className="relative rounded-lg p-4 pr-12 bg-white grid place-items-center">
+            <div className="relative rounded-lg p-4 pr-12 bg-white dark:bg-zinc-900 grid place-items-center">
                 <ExitButton />
                 {children}
             </div>
