@@ -1,16 +1,16 @@
 import './App.css'
-import Board from './components/board/Board'
-import SearchBox from './components/search-box/SearchBox'
+import { useEffect, useState } from 'react'
+import draftPicks from './data/DraftPicks.json'
 import HelpIcon from '@mui/icons-material/Help'
 import SettingsIcon from '@mui/icons-material/Settings'
 import MenuBookIcon from '@mui/icons-material/MenuBook'
-import { useEffect, useState } from 'react'
-import draftPicks from './data/DraftPicks.json'
 import { Era, filterPlayersByEra } from './models/Era'
 import { Player } from './models/Player'
-import { Button, IconButton } from './components/button/Button'
 import { clsx } from 'clsx'
-import PopUp from './components/pop-ups/PopUp'
+import Board from './components/board/Board'
+import SearchBox from './components/search-box/SearchBox'
+import { Button, IconButton } from './components/button/Button'
+import PopUp from './components/pop-up/PopUp'
 import { Dropdown, DropdownItem } from './components/dropdown/Dropdown'
 
 const MAX_ATTEMPTS = 7
@@ -18,12 +18,13 @@ const INITIAL_ATTEMPT = 0
 
 function App() {
     const [picksArray, setPicksArray] = useState<Player[]>(draftPicks)
+
+    // game state
     const [board, setBoard] = useState<Player[]>([])
     const [currAttempt, setCurrAttempt] = useState<number>(INITIAL_ATTEMPT)
-    const [gameOver, setGameOver] = useState({
-        gameOver: false,
-        guessedPlayer: false,
-    })
+    const [gameOver, setGameOver] = useState<boolean>(false)
+    const [correctPlayerGuessed, setCorrectPlayerGuessed] =
+        useState<boolean>(false)
     const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL)
     const [correctPlayer, setCorrectPlayer] = useState<Player>(
         draftPicks[Math.floor(Math.random() * draftPicks.length)]
@@ -36,8 +37,9 @@ function App() {
     const [isReferencesPopupActive, setReferencesPopupActive] = useState(false)
 
     useEffect(() => {
-        if (currAttempt === MAX_ATTEMPTS && !gameOver.gameOver) {
-            setGameOver({ gameOver: true, guessedPlayer: false })
+        if (currAttempt === MAX_ATTEMPTS && !gameOver) {
+            setGameOver(true)
+            setCorrectPlayerGuessed(false)
             setGameOverPopupActive(true)
         }
     }, [currAttempt])
@@ -58,7 +60,8 @@ function App() {
         setBoard([...board, player])
 
         if (player === correctPlayer) {
-            setGameOver({ gameOver: true, guessedPlayer: true })
+            setGameOver(true)
+            setCorrectPlayerGuessed(true)
             setGameOverPopupActive(true)
         }
 
@@ -68,7 +71,8 @@ function App() {
     function resetGame() {
         setBoard([])
         setCurrAttempt(INITIAL_ATTEMPT)
-        setGameOver({ gameOver: false, guessedPlayer: false })
+        setGameOver(false)
+        setCorrectPlayerGuessed(false)
     }
 
     function setNewPlayer() {
@@ -78,70 +82,81 @@ function App() {
     }
 
     return (
-        <div className="text-center relative h-full w-dvw">
-            <div className="mx-[20%] mt-6 grid grid-cols-1 gap-8">
-                <header>
-                    <div className="absolute left-6 top-0 grid grid-cols-3 gap-2">
-                        <IconButton fn={() => setHelpPopupActive(true)}>
-                            <HelpIcon />
-                        </IconButton>
-                        <IconButton fn={() => setSettingsPopupActive(true)}>
-                            <SettingsIcon />
-                        </IconButton>
-                        <IconButton fn={() => setReferencesPopupActive(true)}>
-                            <MenuBookIcon />
-                        </IconButton>
-                    </div>
+        <div className="text-center w-dvw">
+            <header className="absolute left-6 top-6 grid grid-cols-3 gap-2">
+                <IconButton fn={() => setReferencesPopupActive(true)}>
+                    <MenuBookIcon />
+                </IconButton>
+                <IconButton fn={() => setHelpPopupActive(true)}>
+                    <HelpIcon />
+                </IconButton>
+                <IconButton fn={() => setSettingsPopupActive(true)}>
+                    <SettingsIcon />
+                </IconButton>
+            </header>
+            <main className="mx-[20%] mt-6 grid grid-cols-1 gap-8">
+                <div>
                     <div className="font-extrabold text-4xl">BENGLE</div>
                     <div className="font-semibold text-md">
                         Bengals' Draft Day Selections
                     </div>
-                </header>
+                </div>
                 <div className="w-full grid grid-cols-3 gap-2">
-                    {gameOver.gameOver ? (
-                        <Button
-                            fn={() => setNewPlayer()}
-                            classes="justify-self-end place-self-center"
-                        >
-                            new player
-                        </Button>
-                    ) : (
-                        <Button
-                            fn={() => {
-                                setGameOver({
-                                    gameOver: true,
-                                    guessedPlayer: false,
-                                })
-                                setGameOverPopupActive(true)
-                            }}
-                            classes="justify-self-end place-self-center"
-                        >
-                            give up
-                        </Button>
-                    )}
+                    <Button
+                        fn={() => {
+                            setGameOver(true)
+                            setCorrectPlayerGuessed(false)
+                            setGameOverPopupActive(true)
+                        }}
+                        classes={clsx(
+                            gameOver ? 'hidden' : 'visible',
+                            'justify-self-end place-self-center'
+                        )}
+                    >
+                        give up
+                    </Button>
+                    <Button
+                        fn={() => setNewPlayer()}
+                        classes={clsx(
+                            gameOver ? 'visible' : 'hidden',
+                            'justify-self-end place-self-center'
+                        )}
+                    >
+                        new player
+                    </Button>
                     <SearchBox
                         placeholder={
-                            gameOver.gameOver
+                            gameOver
                                 ? 'Game Over'
                                 : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`
                         }
                         data={picksArray}
-                        disabled={gameOver.gameOver}
+                        disabled={gameOver}
                         selectPlayer={selectPlayer}
                     />
                     <Button
                         fn={() => setGameOverPopupActive(true)}
                         classes={clsx(
-                            gameOver.gameOver ? 'visible' : 'hidden',
+                            gameOver ? 'visible' : 'hidden',
                             'justify-self-start place-self-center'
                         )}
                     >
                         show results
                     </Button>
                 </div>
-                <Board board={board} correctPlayer={correctPlayer} />{' '}
-            </div>
-            {/* Help pop-up */}
+                <Board board={board} correctPlayer={correctPlayer} />
+            </main>
+            <footer>
+                <HelpPopUp />
+                <SettingsPopUp />
+                <ReferencesPopUp />
+                <GameOverPopUp />
+            </footer>
+        </div>
+    )
+
+    function HelpPopUp() {
+        return (
             <PopUp
                 isVisible={isHelpPopupActive}
                 setIsVisible={setHelpPopupActive}
@@ -183,7 +198,11 @@ function App() {
                     </ul>
                 </div>
             </PopUp>
-            {/* Settings pop-up */}
+        )
+    }
+
+    function SettingsPopUp() {
+        return (
             <PopUp
                 isVisible={isSettingsPopupActive}
                 setIsVisible={setSettingsPopupActive}
@@ -231,7 +250,11 @@ function App() {
                     </Dropdown>
                 </div>
             </PopUp>
-            {/* References pop-up */}
+        )
+    }
+
+    function ReferencesPopUp() {
+        return (
             <PopUp
                 isVisible={isReferencesPopupActive}
                 setIsVisible={setReferencesPopupActive}
@@ -249,13 +272,17 @@ function App() {
                     </p>
                 </div>
             </PopUp>
-            {/* Game over pop-up */}
+        )
+    }
+
+    function GameOverPopUp() {
+        return (
             <PopUp
                 isVisible={isGameOverPopupActive}
                 setIsVisible={setGameOverPopupActive}
             >
                 <div className="font-lg">
-                    {gameOver.guessedPlayer ? (
+                    {correctPlayerGuessed ? (
                         <div>
                             <p>Draft grade: A+</p>
                             <p>
@@ -282,8 +309,8 @@ function App() {
                     </p>
                 </div>
             </PopUp>
-        </div>
-    )
+        )
+    }
 }
 
 export default App

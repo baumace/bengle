@@ -16,20 +16,26 @@ function PopUp({ isVisible, setIsVisible, children }: PopUpProps) {
             )}
         >
             <div className="relative rounded-lg p-4 pr-12 bg-white grid place-items-center">
-                <button
-                    className="absolute size-8 bg-red-600 text-white right-2 top-2 rounded-lg overflow-hidden"
-                    onClick={() => {
-                        setIsVisible(false)
-                    }}
-                >
-                    <div className="flex bg-black/0 hover:bg-black/20 font-extrabold size-full items-center justify-center">
-                        X
-                    </div>
-                </button>
+                <ExitButton />
                 {children}
             </div>
         </div>
     )
+
+    function ExitButton() {
+        return (
+            <button
+                className="absolute size-8 bg-red-600 text-white right-2 top-2 rounded-lg overflow-hidden"
+                onClick={() => {
+                    setIsVisible(false)
+                }}
+            >
+                <div className="flex bg-black/0 hover:bg-black/20 font-extrabold size-full items-center justify-center">
+                    X
+                </div>
+            </button>
+        )
+    }
 }
 
 export default PopUp
