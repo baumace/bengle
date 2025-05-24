@@ -1,5 +1,5 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import draftPicks from './data/DraftPicks.json'
 import HelpIcon from '@mui/icons-material/Help'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -269,22 +269,39 @@ function App() {
     }
 
     function ReferencesPopUp() {
+        interface LinkProps {
+            href: string
+            children?: ReactNode
+        }
+
+        function Link({ href, children }: LinkProps) {
+            return (
+                <a
+                    className="place-self-start text-orange"
+                    href={href}
+                    target="_blank"
+                >
+                    {children}
+                </a>
+            )
+        }
+
         return (
             <PopUp
                 isVisible={isReferencesPopupActive}
                 setIsVisible={setReferencesPopupActive}
             >
-                <div className="font-lg">
-                    <p>
-                        Data Source:{' '}
-                        <a href="https://www.pro-football-reference.com/teams/cin/draft.htm">
-                            Pro Football Reference
-                        </a>
-                    </p>
-                    <p>
-                        Inspired by{' '}
-                        <a href="https://poeltl.dunk.town/">Poeltl</a>
-                    </p>
+                <div className="font-lg grid grid-cols-[1fr_2fr] gap-1 w-fit">
+                    <p>Data Source:</p>
+                    <Link href="https://www.pro-football-reference.com/teams/cin/draft.htm">
+                        Pro Football Reference
+                    </Link>
+                    <p>Inspired By:</p>
+                    <Link href="https://poeltl.dunk.town/">Poeltl</Link>
+                    <p>Source Code:</p>
+                    <Link href="https://github.com/baumace/bengle">
+                        github.com/baumace/bengle
+                    </Link>
                 </div>
             </PopUp>
         )
