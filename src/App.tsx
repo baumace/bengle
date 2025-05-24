@@ -71,24 +71,24 @@ function App() {
     }
 
     return (
-        <div className="text-center relative h-full w-full m-6">
-            <header className="p-4">
-                <div className="font-extrabold text-4xl">BENGLE</div>
-                <div className="font-semibold text-md">
-                    Bengals Draft Day Selections
-                </div>
-            </header>
-            <div className="mx-[20%] grid grid-cols-1 gap-4">
-                <div className="w-full grid grid-cols-[1fr_2fr_1fr] gap-2">
+        <div className="text-center relative h-full w-dvw">
+            <div className="mx-[20%] mt-6 grid grid-cols-1 gap-8">
+                <header>
+                    <div className="font-extrabold text-4xl">BENGLE</div>
+                    <div className="font-semibold text-md">
+                        Bengals' Draft Day Selections
+                    </div>
+                </header>
+                <div className="w-full grid grid-cols-3 gap-2">
                     {gameOver.gameOver ? (
                         <Button
-                            text="new player"
                             fn={() => setNewPlayer()}
                             classes="justify-self-end place-self-center"
-                        />
+                        >
+                            new player
+                        </Button>
                     ) : (
                         <Button
-                            text="give up"
                             fn={() => {
                                 setGameOver({
                                     gameOver: true,
@@ -97,7 +97,9 @@ function App() {
                                 setGameOverPopupActive(true)
                             }}
                             classes="justify-self-end place-self-center"
-                        />
+                        >
+                            give up
+                        </Button>
                     )}
                     <SearchBox
                         placeholder={
@@ -110,13 +112,14 @@ function App() {
                         selectPlayer={selectPlayer}
                     />
                     <Button
-                        text="show results"
                         fn={() => setGameOverPopupActive(true)}
                         classes={clsx(
                             gameOver.gameOver ? 'visible' : 'hidden',
                             'justify-self-start place-self-center'
                         )}
-                    />
+                    >
+                        show results
+                    </Button>
                 </div>
                 <Board board={board} correctPlayer={correctPlayer} />{' '}
             </div>
@@ -134,7 +137,7 @@ function App() {
                 </p>
             </footer>
             */}
-            <div className="absolute left-0 top-0 grid grid-cols-2 gap-2">
+            <div className="absolute left-6 top-6 grid grid-cols-2 gap-2">
                 <HelpPopUp />
                 <SettingsPopUp
                     setNewPlayer={setNewPlayer}

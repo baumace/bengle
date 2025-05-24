@@ -62,43 +62,34 @@ function SettingsPopUp({
         }
 
         return (
-            <div className="grid grid-cols-[2fr_1.5fr_1fr] gap-4 text-orange">
-                <p className="font-extrabold">Selected Years:</p>
-                <div>
-                    <div
-                        className={clsx(
-                            'border-2 border-black bg-white hover:bg-orange/10',
-                            dropdownActive
-                                ? 'rounded-tl-lg rounded-tr-lg'
-                                : 'rounded-lg'
-                        )}
-                        onClick={() => handleDropdownClick()}
-                    >
-                        <p className="p-1">{selectedEra}</p>
-                    </div>
-                    <div
-                        className={clsx(
-                            'border-2 border-black border-t-0 bg-white rounded-bl-lg rounded-br-lg',
-                            dropdownActive ? 'visible' : 'hidden'
-                        )}
-                    >
-                        <EraDropdownItem era={Era.ALL} />
-                        <EraDropdownItem era={Era.TWO_THOUSAND_TENS} />
-                        <EraDropdownItem era={Era.TWO_THOUSAND} />
-                        <EraDropdownItem era={Era.NINETIES} />
-                        <EraDropdownItem era={Era.EIGHTIES} />
-                        <EraDropdownItem era={Era.SEVENTIES} />
-                    </div>
+            <div className="relative cursor-pointer text-orange">
+                <Button fn={() => handleDropdownClick()}>
+                    {selectedEra}
+                    {dropdownActive ? (
+                        <KeyboardArrowUpIcon
+                            onClick={() => handleDropdownClick()}
+                            className="ml-1 cursor-pointer"
+                        />
+                    ) : (
+                        <KeyboardArrowDownIcon
+                            onClick={() => handleDropdownClick()}
+                            className="ml-1 cursor-pointer"
+                        />
+                    )}
+                </Button>
+                <div
+                    className={clsx(
+                        'absolute mt-1 w-full border-2 border-black bg-white rounded-lg',
+                        dropdownActive ? 'visible' : 'hidden'
+                    )}
+                >
+                    <EraDropdownItem era={Era.ALL} />
+                    <EraDropdownItem era={Era.TWO_THOUSAND_TENS} />
+                    <EraDropdownItem era={Era.TWO_THOUSAND} />
+                    <EraDropdownItem era={Era.NINETIES} />
+                    <EraDropdownItem era={Era.EIGHTIES} />
+                    <EraDropdownItem era={Era.SEVENTIES} />
                 </div>
-                {dropdownActive ? (
-                    <KeyboardArrowUpIcon
-                        onClick={() => handleDropdownClick()}
-                    />
-                ) : (
-                    <KeyboardArrowDownIcon
-                        onClick={() => handleDropdownClick()}
-                    />
-                )}
             </div>
         )
     }
@@ -109,21 +100,21 @@ function SettingsPopUp({
                 <SettingsIcon />
             </IconButton>
             <PopUp isVisible={isVisible} setIsVisible={setVisibility}>
-                <div className="grid grid-cols-1 gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <Button
-                            text="new player"
-                            fn={() =>
-                                handleExitingClick(ExitClickSource.NEW_PLAYER)
-                            }
-                        />
-                        <Button
-                            text="reset board"
-                            fn={() =>
-                                handleExitingClick(ExitClickSource.RESET_BOARD)
-                            }
-                        />
-                    </div>
+                <div className="grid grid-cols-1 gap-2 place-items-center justify-items-center">
+                    <Button
+                        fn={() =>
+                            handleExitingClick(ExitClickSource.NEW_PLAYER)
+                        }
+                    >
+                        new player
+                    </Button>
+                    <Button
+                        fn={() =>
+                            handleExitingClick(ExitClickSource.RESET_BOARD)
+                        }
+                    >
+                        reset board
+                    </Button>
                     <EraDropdown />
                 </div>
             </PopUp>

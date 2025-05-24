@@ -102,7 +102,7 @@ function Board({ board, correctPlayer }: BoardProps) {
         return (
             <div
                 className={clsx(
-                    'text-lg text-black border border-black rounded-lg',
+                    'text-lg py-1 text-black border border-black rounded-lg',
                     status === CellStatus.CORRECT && 'bg-green-300',
                     status === CellStatus.ALMOST && 'bg-yellow-200'
                 )}
