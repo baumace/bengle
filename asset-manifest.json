@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/bengle/static/css/main.4a207186.css",
+    "main.js": "/bengle/static/js/main.4151bfbe.js",
+    "index.html": "/bengle/index.html",
+    "main.4a207186.css.map": "/bengle/static/css/main.4a207186.css.map",
+    "main.4151bfbe.js.map": "/bengle/static/js/main.4151bfbe.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4a207186.css",
+    "static/js/main.4151bfbe.js"
+  ]
+}
