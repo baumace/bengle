@@ -59,7 +59,7 @@ interface DropdownItemProps {
 
 export function DropdownItem({ fn, children }: DropdownItemProps) {
     return (
-        <div className="w-full text-md hover:bg-orange/10" onClick={fn}>
+        <div className="w-full text-md py-1 hover:bg-orange/10" onClick={fn}>
             {children}
         </div>
     )
