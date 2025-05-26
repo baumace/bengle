@@ -1,8 +1,8 @@
 {
   "name": "bengle",
   "version": "1.1.1",
-  "private": true,
   "homepage": "https://baumace.github.io/bengle",
+  "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
@@ -18,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "pnpm run build",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
@@ -43,6 +43,7 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "autoprefixer": "^10.4.21",
+    "gh-pages": "^6.3.0",
     "postcss": "^8.5.3",
     "react-scripts": "^5.0.1",
     "tailwindcss": "3",
