@@ -293,19 +293,23 @@ function App() {
             )
         }
 
+        interface LabelProps {
+            children?: ReactNode
+        }
+
+        function Label({ children }: LabelProps) {
+            return <div className="place-self-end">{children}</div>
+        }
+
         return (
             <PopUp
                 isVisible={isReferencesPopupActive}
                 setIsVisible={setReferencesPopupActive}
             >
                 <div className="font-lg grid grid-cols-[1fr_2fr] gap-1 w-fit">
-                    <p>Data Source:</p>
-                    <Link href="https://www.pro-football-reference.com/teams/cin/draft.htm">
-                        Pro Football Reference
-                    </Link>
-                    <p>Inspired By:</p>
+                    <Label>Inspired By:</Label>
                     <Link href="https://poeltl.dunk.town/">Poeltl</Link>
-                    <p>Source Code:</p>
+                    <Label>Source Code:</Label>
                     <Link href="https://github.com/baumace/bengle">
                         github.com/baumace/bengle
                     </Link>
