@@ -53,7 +53,7 @@ export function Dropdown({ text, children }: DropdownProps) {
 }
 
 interface DropdownItemProps {
-    fn?: ({}: any) => void
+    fn?: (arg0: any) => void
     children?: ReactNode
 }
 

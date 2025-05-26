@@ -43,7 +43,7 @@ function App() {
             setCorrectPlayerGuessed(false)
             setGameOverPopupActive(true)
         }
-    }, [currAttempt])
+    }, [currAttempt, gameOver])
 
     useEffect(() => {
         resetGame()
@@ -287,6 +287,7 @@ function App() {
                     className="place-self-start text-orange"
                     href={href}
                     target="_blank"
+                    rel="noreferrer"
                 >
                     {children}
                 </a>
