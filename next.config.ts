@@ -1,9 +1,7 @@
-import type { NextConfig } from 'next'
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    basePath: '/bengle',
-    output: 'export', // Outputs a Single-Page Application (SPA)
-    distDir: 'build', // Changes the build output directory to `build`
-}
+  /* config options here */
+};
 
-export default nextConfig
+export default nextConfig;
