@@ -10,6 +10,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-orange: oklch(66.36% 0.217 36.46);
 }
 
 @media (prefers-color-scheme: dark) {
