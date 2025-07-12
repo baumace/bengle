@@ -1,8 +1,10 @@
 import React, { ReactElement, ReactNode, useState } from 'react'
 import { Button } from '../button/Button'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+//import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+//import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { clsx } from 'clsx'
+import { ChevronUpIcon } from '@heroicons/react/16/solid'
+import { ChevronDownIcon } from '@heroicons/react/16/solid'
 
 interface DropdownProps {
     text: string
@@ -17,26 +19,28 @@ export function Dropdown({ text, children }: DropdownProps) {
     // close dropdown when an item is clicked
     const clonedChildren = React.Children.map(children, (child) =>
         React.cloneElement(child, {
-            fn: (...args: any) => {
-                child.props.fn?.(args)
+            fn: (event: React.MouseEvent<HTMLDivElement>) => {
+                child.props.fn?.(event)
                 setDropdownActive(false)
             },
         })
     )
+
+    const iconClasses = 'ml-1 cursor-pointer size-6 inline-block'
 
     return (
         <div className="relative cursor-pointer text-orange">
             <Button fn={() => setDropdownActive(!dropdownActive)}>
                 {text}
                 {dropdownActive ? (
-                    <KeyboardArrowUpIcon
+                    <ChevronUpIcon
                         onClick={() => setDropdownActive(!dropdownActive)}
-                        className="ml-1 cursor-pointer"
+                        className={iconClasses}
                     />
                 ) : (
-                    <KeyboardArrowDownIcon
+                    <ChevronDownIcon
                         onClick={() => setDropdownActive(!dropdownActive)}
-                        className="ml-1 cursor-pointer"
+                        className={iconClasses}
                     />
                 )}
             </Button>
@@ -53,7 +57,7 @@ export function Dropdown({ text, children }: DropdownProps) {
 }
 
 interface DropdownItemProps {
-    fn?: (arg0: any) => void
+    fn?: (event: React.MouseEvent<HTMLDivElement>) => void
     children?: ReactNode
 }
 

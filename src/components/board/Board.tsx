@@ -1,4 +1,4 @@
-import { Player } from '../../models/Player'
+import { Player } from '@/types/Player'
 import clsx from 'clsx'
 
 interface BoardProps {

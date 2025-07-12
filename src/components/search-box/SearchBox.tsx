@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Player } from '../../models/Player'
+import { Player } from '@/types/Player'
 import clsx from 'clsx'
 
 const STARTING_INDEX = -1

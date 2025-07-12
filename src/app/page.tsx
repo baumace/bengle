@@ -1,18 +1,19 @@
-import './App.css'
+'use client'
+
 import { ReactNode, useEffect, useState } from 'react'
-import draftPicks from './data/DraftPicks.json'
-import HelpIcon from '@mui/icons-material/Help'
-import SettingsIcon from '@mui/icons-material/Settings'
-import MenuBookIcon from '@mui/icons-material/MenuBook'
-import { Era, filterPlayersByEra } from './models/Era'
-import { Player } from './models/Player'
+import draftPicks from '@/data/DraftPicks.json'
+import { Era, filterPlayersByEra } from '@/types/Era'
+import { Player } from '@/types/Player'
 import { clsx } from 'clsx'
-import Board from './components/board/Board'
-import SearchBox from './components/search-box/SearchBox'
-import { Button, IconButton } from './components/button/Button'
-import PopUp from './components/pop-up/PopUp'
-import { Dropdown, DropdownItem } from './components/dropdown/Dropdown'
-import Tooltip from './components/tooltip/Tooltip'
+import Board from '@/components/board/Board'
+import SearchBox from '@/components/search-box/SearchBox'
+import { Button, IconButton } from '@/components/button/Button'
+import PopUp from '@/components/pop-up/PopUp'
+import { Dropdown, DropdownItem } from '@/components/dropdown/Dropdown'
+import Tooltip from '@/components/tooltip/Tooltip'
+import { BookOpenIcon } from '@heroicons/react/24/outline'
+import { InformationCircleIcon } from '@heroicons/react/20/solid'
+import { Cog6ToothIcon } from '@heroicons/react/20/solid'
 
 const MAX_ATTEMPTS = 7
 const INITIAL_ATTEMPT = 0
@@ -87,17 +88,17 @@ function App() {
             <header className="absolute left-12 top-6 grid grid-cols-3 gap-2">
                 <Tooltip content="References">
                     <IconButton fn={() => setReferencesPopupActive(true)}>
-                        <MenuBookIcon />
+                        <BookOpenIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip content="Help">
                     <IconButton fn={() => setHelpPopupActive(true)}>
-                        <HelpIcon />
+                        <InformationCircleIcon />
                     </IconButton>
                 </Tooltip>
                 <Tooltip content="Settings">
                     <IconButton fn={() => setSettingsPopupActive(true)}>
-                        <SettingsIcon />
+                        <Cog6ToothIcon />
                     </IconButton>
                 </Tooltip>
             </header>
