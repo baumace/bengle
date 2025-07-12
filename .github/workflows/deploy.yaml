@@ -22,11 +22,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node and pnpm
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
-          cache: "pnpm"
+          node-version: 'lts/*'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: Enable pnpm via Corepack
+        run: corepack enable
 
       - name: Install pnpm
         run: npm install -g pnpm
