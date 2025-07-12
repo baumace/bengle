@@ -30,6 +30,7 @@ jobs:
         uses: actions/configure-pages@v4
         with:
           static_site_generator: next
+          inject: false
 
       - name: Build with Next.js
         run: pnpm build
