@@ -6,4 +6,3 @@ export interface Player {
     round: number
     pick: number
 }
-
