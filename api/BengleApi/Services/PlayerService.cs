@@ -4,13 +4,8 @@ namespace BengleApi.Services;
 
 public class PlayerService : IPlayerService
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IConfiguration _configuration;
-    
-    public PlayerService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public PlayerService()
     {
-        _httpClientFactory = httpClientFactory;
-        _configuration = configuration;
     }
     
     public List<Player> GetAllPlayers()
