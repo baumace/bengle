@@ -4,23 +4,15 @@ namespace BengleApi.Services;
 
 public class PlayerService : IPlayerService
 {
-    public PlayerService()
+    private readonly Supabase.Client _supabaseClient;
+    
+    public PlayerService(Supabase.Client supabaseClient)
     {
+        _supabaseClient = supabaseClient ?? throw new ArgumentNullException(nameof(supabaseClient));
     }
     
     public List<Player> GetAllPlayers()
     {
-        return new List<Player>
-        {
-            new Player
-            {
-                Name = "Joe Burrow",
-                College = "LSU",
-                Year = 2020,
-                Position = "QB",
-                Round = 1,
-                Pick = 1
-            }
-        };
+        return _supabaseClient.From<Player>().Get().Result.Models.ToList();
     }
 }

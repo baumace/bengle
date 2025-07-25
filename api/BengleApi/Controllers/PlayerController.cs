@@ -16,9 +16,19 @@ namespace BengleApi.Controllers
         }
         
         [HttpGet]
-        public IEnumerable<Player> Get()
+        public ActionResult<IEnumerable<Player>> Get()
         {
-            return _playerService.GetAllPlayers();
+            var players = _playerService.GetAllPlayers().
+                    Select(p => new PlayerDto
+                    {
+                        Name = p.Name,
+                        College = p.College,
+                        Year = p.Year,
+                        Position = p.Position,
+                        Round = p.Round,
+                        Pick = p.Pick
+                    }).ToList();
+            return Ok(players);
         }
     }
 }

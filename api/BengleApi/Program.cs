@@ -1,4 +1,5 @@
 using BengleApi.Services;
+using Supabase;
 
 namespace BengleApi
 {
@@ -8,6 +9,18 @@ namespace BengleApi
         {
             var builder = WebApplication.CreateBuilder(args);
             
+            // Initialize Supabase
+            var url = Environment.GetEnvironmentVariable("SUPABASE_URL")?.Trim('\"');
+            var key = Environment.GetEnvironmentVariable("SUPABASE_KEY")?.Trim('\"');
+            var options = new SupabaseOptions
+            {
+                AutoRefreshToken = true,
+                AutoConnectRealtime = true
+            };
+            var supabaseClient = new Client(url, key, options);
+            supabaseClient.InitializeAsync().Wait();
+            builder.Services.AddSingleton<Client>(s => supabaseClient);
+
             // Add custom services to the container
             builder.Services.AddTransient<IPlayerService, PlayerService>();
 
