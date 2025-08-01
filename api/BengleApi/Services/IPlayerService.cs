@@ -1,8 +1,8 @@
-using BengleApi.Models;
+using BengleApi.Models.Dtos;
 
 namespace BengleApi.Services;
 
 public interface IPlayerService
 {
-    List<Player> GetAllPlayers();
+    public Task<List<PlayerDto>> GetAllPlayersAsync();
 }

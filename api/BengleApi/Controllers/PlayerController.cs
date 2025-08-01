@@ -2,33 +2,22 @@ using BengleApi.Models;
 using BengleApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BengleApi.Controllers
+namespace BengleApi.Controllers;
+
+[Route("api/players")]
+[ApiController]
+public class PlayerController : ControllerBase
 {
-    [Route("api/players")]
-    [ApiController]
-    public class PlayerController : ControllerBase
+    private readonly IPlayerService _playerService;
+
+    public PlayerController(IPlayerService playerService)
     {
-        private readonly IPlayerService _playerService;
-        
-        public PlayerController(IPlayerService playerService)
-        {
-            _playerService = playerService;
-        }
-        
-        [HttpGet]
-        public ActionResult<IEnumerable<Player>> Get()
-        {
-            var players = _playerService.GetAllPlayers().
-                    Select(p => new PlayerDto
-                    {
-                        Name = p.Name,
-                        College = p.College,
-                        Year = p.Year,
-                        Position = p.Position,
-                        Round = p.Round,
-                        Pick = p.Pick
-                    }).ToList();
-            return Ok(players);
-        }
+        _playerService = playerService;
+    }
+
+    [HttpGet]
+    public ActionResult<IEnumerable<Player>> Get()
+    {
+        return Ok(_playerService.GetAllPlayersAsync().Result);
     }
 }

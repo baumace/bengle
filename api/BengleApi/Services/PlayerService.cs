@@ -1,18 +1,28 @@
-using BengleApi.Models;
+using BengleApi.Models.Dtos;
+using BengleApi.Repositories;
 
 namespace BengleApi.Services;
 
 public class PlayerService : IPlayerService
 {
-    private readonly Supabase.Client _supabaseClient;
-    
-    public PlayerService(Supabase.Client supabaseClient)
+    private readonly IPlayerRepository _playerRepository;
+
+    public PlayerService(IPlayerRepository playerRepository)
     {
-        _supabaseClient = supabaseClient ?? throw new ArgumentNullException(nameof(supabaseClient));
+        _playerRepository = playerRepository ?? throw new ArgumentNullException(nameof(playerRepository));
     }
-    
-    public List<Player> GetAllPlayers()
+
+    public async Task<List<PlayerDto>> GetAllPlayersAsync()
     {
-        return _supabaseClient.From<Player>().Get().Result.Models.ToList();
+        var players = await _playerRepository.GetAllPlayersAsync();
+        return players.Select(p => new PlayerDto
+        {
+            Name = p.Name,
+            College = p.College,
+            Year = p.Year,
+            Position = p.Position,
+            Round = p.Round,
+            Pick = p.Pick
+        }).ToList();
     }
 }

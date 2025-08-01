@@ -1,50 +1,53 @@
+using BengleApi.Repositories;
 using BengleApi.Services;
 using Supabase;
 
-namespace BengleApi
+namespace BengleApi;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Initialize Supabase
+        var url = Environment.GetEnvironmentVariable("SUPABASE_URL")?.Trim('\"');
+        var key = Environment.GetEnvironmentVariable("SUPABASE_KEY")?.Trim('\"');
+        var options = new SupabaseOptions
         {
-            var builder = WebApplication.CreateBuilder(args);
-            
-            // Initialize Supabase
-            var url = Environment.GetEnvironmentVariable("SUPABASE_URL")?.Trim('\"');
-            var key = Environment.GetEnvironmentVariable("SUPABASE_KEY")?.Trim('\"');
-            var options = new SupabaseOptions
-            {
-                AutoRefreshToken = true,
-                AutoConnectRealtime = true
-            };
-            var supabaseClient = new Client(url, key, options);
-            supabaseClient.InitializeAsync().Wait();
-            builder.Services.AddSingleton<Client>(s => supabaseClient);
+            AutoRefreshToken = true,
+            AutoConnectRealtime = true
+        };
+        var supabaseClient = new Client(url, key, options);
+        supabaseClient.InitializeAsync().Wait();
+        builder.Services.AddSingleton<Client>(s => supabaseClient);
 
-            // Add custom services to the container
-            builder.Services.AddTransient<IPlayerService, PlayerService>();
+        // Add custom repositories to the container
+        builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
-            // Add services to the container
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+        // Add custom services to the container
+        builder.Services.AddScoped<IPlayerService, PlayerService>();
 
-            var app = builder.Build();
+        // Add services to the container
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-            // Configure the HTTP request pipeline
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+        var app = builder.Build();
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
+        // Configure the HTTP request pipeline
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

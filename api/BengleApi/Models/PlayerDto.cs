@@ -1,4 +1,4 @@
-namespace BengleApi.Models;
+namespace BengleApi.Models.Dtos;
 
 public class PlayerDto
 {
