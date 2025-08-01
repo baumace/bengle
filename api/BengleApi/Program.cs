@@ -21,6 +21,13 @@ public class Program
         var supabaseClient = new Client(url, key, options);
         supabaseClient.InitializeAsync().Wait();
         builder.Services.AddSingleton<Client>(s => supabaseClient);
+        
+        // Add logging
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddConsole();
+            loggingBuilder.AddDebug();
+        });
 
         // Add custom repositories to the container
         builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
