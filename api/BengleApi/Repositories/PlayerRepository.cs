@@ -16,7 +16,15 @@ public class PlayerRepository : IPlayerRepository
 
     public async Task<List<Player>> GetAllPlayersAsync()
     {
-        var response = await _supabaseClient.From<Player>().Get();
-        return response.Models.ToList();
+        try
+        {
+            var response = await _supabaseClient.From<Player>().Get();
+            return response.Models.ToList();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching players from Supabase");
+            return new List<Player>();
+        }
     }
 }

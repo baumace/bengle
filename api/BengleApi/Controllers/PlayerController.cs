@@ -1,11 +1,11 @@
 using System.Diagnostics;
-using BengleApi.Models;
+using BengleApi.Models.Dtos;
 using BengleApi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BengleApi.Controllers;
 
-[Route("api/players")]
+[Route("bengle/api/players")]
 [ApiController]
 public class PlayerController : ControllerBase
 {
@@ -19,10 +19,10 @@ public class PlayerController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<Player>> Get()
+    public async Task<ActionResult<IEnumerable<PlayerDto>>> Get()
     {
         var stopwatch = Stopwatch.StartNew();
-        var result = _playerService.GetAllPlayersAsync().Result;
+        var result = await _playerService.GetAllPlayersAsync();
         stopwatch.Stop();
         
         _logger.LogInformation($"Get players executed in {stopwatch.ElapsedMilliseconds}ms");

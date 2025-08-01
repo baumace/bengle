@@ -6,7 +6,7 @@ namespace BengleApi;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ public class Program
             AutoConnectRealtime = true
         };
         var supabaseClient = new Client(url, key, options);
-        supabaseClient.InitializeAsync().Wait();
+        await supabaseClient.InitializeAsync();
         builder.Services.AddSingleton<Client>(s => supabaseClient);
         
         // Add logging
