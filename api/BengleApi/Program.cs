@@ -1,37 +1,60 @@
+using BengleApi.Repositories;
 using BengleApi.Services;
+using Supabase;
 
-namespace BengleApi
+namespace BengleApi;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        // Initialize Supabase
+        var url = Environment.GetEnvironmentVariable("SUPABASE_URL")?.Trim('\"');
+        var key = Environment.GetEnvironmentVariable("SUPABASE_KEY")?.Trim('\"');
+        var options = new SupabaseOptions
         {
-            var builder = WebApplication.CreateBuilder(args);
-            
-            // Add custom services to the container
-            builder.Services.AddTransient<IPlayerService, PlayerService>();
+            AutoRefreshToken = true,
+            AutoConnectRealtime = true
+        };
+        var supabaseClient = new Client(url, key, options);
+        await supabaseClient.InitializeAsync();
+        builder.Services.AddSingleton<Client>(s => supabaseClient);
+        
+        // Add logging
+        builder.Services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddConsole();
+            loggingBuilder.AddDebug();
+        });
 
-            // Add services to the container
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+        // Add custom repositories to the container
+        builder.Services.AddScoped<IPlayerRepository, PlayerRepository>();
 
-            var app = builder.Build();
+        // Add custom services to the container
+        builder.Services.AddScoped<IPlayerService, PlayerService>();
 
-            // Configure the HTTP request pipeline
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+        // Add services to the container
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
 
-            app.UseHttpsRedirection();
+        var app = builder.Build();
 
-            app.UseAuthorization();
-
-            app.MapControllers();
-
-            app.Run();
+        // Configure the HTTP request pipeline
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }
