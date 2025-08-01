@@ -10,9 +10,11 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Initialize Supabase
+        // Get the Supabase URL and Key from environment variables
         var url = Environment.GetEnvironmentVariable("SUPABASE_URL")?.Trim('\"');
         var key = Environment.GetEnvironmentVariable("SUPABASE_KEY")?.Trim('\"');
+        
+        // Initialize Supabase
         var options = new SupabaseOptions
         {
             AutoRefreshToken = true,
