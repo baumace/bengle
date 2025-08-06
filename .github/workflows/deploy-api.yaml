@@ -27,7 +27,7 @@ jobs:
           context: ./api/BengleApi
           file: ./api/BengleApi/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bengleapi:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -40,12 +40,12 @@ jobs:
           username: ${{ secrets.DO_SSH_USER }}
           key: ${{ secrets.DO_SSH_KEY }}
           script: |
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengleapi:latest
-            docker stop bengleapi || true
-            docker rm bengleapi || true
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
+            docker stop bengle-api || true
+            docker rm bengle-api || true
             docker image prune -f
-            docker run -d --name bengleapi --restart always \
+            docker run -d --name bengle-api --restart always \
               -p 8080:8080 \
               -e SUPABASE_URL=$(bws secret get ${{ secrets.BWS_SUPABASE_URL_UUID }} | jq -r '.value') \
               -e SUPABASE_KEY=$(bws secret get ${{ secrets.BWS_SUPABASE_KEY_UUID }} | jq -r '.value') \
-              ${{ secrets.DOCKERHUB_USERNAME }}/bengleapi:latest
+              ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
