@@ -40,6 +40,7 @@ jobs:
           username: ${{ secrets.DO_SSH_USER }}
           key: ${{ secrets.DO_SSH_KEY }}
           script: |
+            export BWS_ACCESS_TOKEN=$(cat ~/.secrets/bws_token)
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
             docker stop bengle-api || true
             docker rm bengle-api || true
