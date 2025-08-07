@@ -3,7 +3,7 @@ name: Deploy API to DigitalOcean Droplet
 on:
   push:
     branches:
-      - "**"
+      - main
 
 jobs:
   build-and-push:
