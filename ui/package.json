@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "next dev --turbopack",
         "build": "next build",
-        "serve": "serve out --port 3000",
+        "serve": "serve out --listen 3000",
         "start": "next start",
         "lint": "next lint"
     },
