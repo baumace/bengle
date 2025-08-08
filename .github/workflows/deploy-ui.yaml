@@ -3,7 +3,7 @@ name: Deploy UI to DigitalOcean Droplet
 on:
   push:
     branches:
-      - "**"
+      - main
 
 jobs:
   build-and-push:
