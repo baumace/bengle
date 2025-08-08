@@ -48,5 +48,5 @@ jobs:
             docker rm bengle-ui || true
             docker image prune -f
             docker run -d --name bengle-ui --restart always \
-              -p 8081:3000\
+              -p 8081:3000 \
               ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
