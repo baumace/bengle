@@ -13,23 +13,13 @@ import Tooltip from '@/components/tooltip/Tooltip'
 import { BookOpenIcon } from '@heroicons/react/24/outline'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { Cog6ToothIcon } from '@heroicons/react/20/solid'
-
-const MAX_ATTEMPTS = 7
-const INITIAL_ATTEMPT = 0
+import { usePlayers, UsePlayersReturn } from '@/hooks/usePlayers'
+import { useGame } from '@/hooks/useGame'
 
 function App() {
-    const [picksArray, setPicksArray] = useState<Player[]>([])
-
-    // game state
-    const [board, setBoard] = useState<Player[]>([])
-    const [currAttempt, setCurrAttempt] = useState<number>(INITIAL_ATTEMPT)
-    const [gameOver, setGameOver] = useState<boolean>(false)
-    const [correctPlayerGuessed, setCorrectPlayerGuessed] =
-        useState<boolean>(false)
     const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL)
-    const [correctPlayer, setCorrectPlayer] = useState<Player>(
-        picksArray[Math.floor(Math.random() * picksArray.length)]
-    )
+    const { players, loading, error }: UsePlayersReturn = usePlayers(selectedEra);
+    const game = useGame({ players });
 
     // pop-ups
     const [isGameOverPopupActive, setGameOverPopupActive] = useState(false)
@@ -38,62 +28,10 @@ function App() {
     const [isReferencesPopupActive, setReferencesPopupActive] = useState(false)
 
     useEffect(() => {
-        fetch("https://acebaum.com/bengle/api/players")
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data)
-                setPicksArray(data)
-            })
-    }, [])
-
-    useEffect(() => {
-        if (currAttempt === MAX_ATTEMPTS && !gameOver) {
-            setGameOver(true)
-            setCorrectPlayerGuessed(false)
+        if (game.currAttempt === 7 && !game.gameOver) {
             setGameOverPopupActive(true)
         }
-    }, [currAttempt, gameOver])
-
-    useEffect(() => {
-        resetGame()
-    }, [correctPlayer])
-
-    useEffect(() => {
-        fetch("https://acebaum.com/bengle/api/players")
-            .then((response) => response.json())
-            .then((data) => {
-                setPicksArray(
-                    data.filter((player: Player) =>
-                        filterPlayersByEra(player, selectedEra)
-                    )
-                )
-            })
-    }, [selectedEra])
-
-    function selectPlayer(player: Player) {
-        setBoard([...board, player])
-
-        if (player === correctPlayer) {
-            setGameOver(true)
-            setCorrectPlayerGuessed(true)
-            setGameOverPopupActive(true)
-        }
-
-        setCurrAttempt(currAttempt + 1)
-    }
-
-    function resetGame() {
-        setBoard([])
-        setCurrAttempt(INITIAL_ATTEMPT)
-        setGameOver(false)
-        setCorrectPlayerGuessed(false)
-    }
-
-    function setNewPlayer() {
-        setCorrectPlayer(
-            picksArray[Math.floor(Math.random() * picksArray.length)]
-        )
-    }
+    }, [game.currAttempt, game.gameOver])
 
     return (
         <div className="font-mono text-center h-dvh w-dvw bg-white dark:bg-zinc-900 text-black dark:text-white/80 [&_*]:border-black/20 [&_*]:dark:border-white/20">
@@ -124,21 +62,20 @@ function App() {
                 <div className="w-full grid grid-cols-3 gap-2">
                     <Button
                         fn={() => {
-                            setGameOver(true)
-                            setCorrectPlayerGuessed(false)
+                            game.endGame();
                             setGameOverPopupActive(true)
                         }}
                         classes={clsx(
-                            gameOver ? 'hidden' : 'visible',
+                            game.gameOver ? 'hidden' : 'visible',
                             'justify-self-end place-self-center'
                         )}
                     >
                         give up
                     </Button>
                     <Button
-                        fn={() => setNewPlayer()}
+                        fn={() => game.setNewPlayer()}
                         classes={clsx(
-                            gameOver ? 'visible' : 'hidden',
+                            game.gameOver ? 'visible' : 'hidden',
                             'justify-self-end place-self-center'
                         )}
                     >
@@ -146,33 +83,31 @@ function App() {
                     </Button>
                     <SearchBox
                         placeholder={
-                            gameOver
+                            game.gameOver
                                 ? 'Game Over'
-                                : `Selection ${currAttempt + 1} of ${MAX_ATTEMPTS}`
+                                : `Selection ${game.currAttempt + 1} of 7`
                         }
-                        data={picksArray}
-                        disabled={gameOver}
-                        selectPlayer={selectPlayer}
+                        data={usePlayers(selectedEra).players}
+                        disabled={game.gameOver}
+                        selectPlayer={game.selectPlayer}
                     />
                     <Button
                         fn={() => setGameOverPopupActive(true)}
                         classes={clsx(
-                            gameOver ? 'visible' : 'hidden',
+                            game.gameOver ? 'visible' : 'hidden',
                             'justify-self-start place-self-center'
                         )}
                     >
                         show results
                     </Button>
                 </div>
-                <Board board={board} correctPlayer={correctPlayer} />
+                <Board board={game.board} correctPlayer={game.correctPlayer} />
             </main>
             <footer>
-                {/*
                 <HelpPopUp />
                 <SettingsPopUp />
                 <ReferencesPopUp />
                 <GameOverPopUp />
-                */}
             </footer>
         </div>
     )
@@ -247,7 +182,7 @@ function App() {
                 <div className="grid grid-cols-1 gap-2 place-items-center justify-items-center">
                     <Button
                         fn={() => {
-                            setNewPlayer()
+                            game.setNewPlayer()
                             setSettingsPopupActive(false)
                         }}
                     >
@@ -255,7 +190,7 @@ function App() {
                     </Button>
                     <Button
                         fn={() => {
-                            resetGame()
+                            game.resetGame()
                             setSettingsPopupActive(false)
                         }}
                     >
@@ -335,17 +270,19 @@ function App() {
     }
 
     function GameOverPopUp() {
+        if (!game.correctPlayer) return null;
+
         return (
             <PopUp
                 isVisible={isGameOverPopupActive}
                 setIsVisible={setGameOverPopupActive}
             >
                 <div className="font-lg">
-                    {correctPlayerGuessed ? (
+                    {game.correctPlayerGuessed ? (
                         <div>
                             <p>Draft grade: A+</p>
                             <p>
-                                You guessed the correct player in {currAttempt}{' '}
+                                You guessed the correct player in {game.currAttempt}{' '}
                                 selections!
                             </p>
                         </div>
@@ -358,12 +295,12 @@ function App() {
                         </div>
                     )}
                     <p>
-                        The correct player is {correctPlayer.name},{' '}
-                        {correctPlayer.position} from {correctPlayer.college}
+                        The correct player is {game.correctPlayer.name},{' '}
+                        {game.correctPlayer.position} from {game.correctPlayer.college}
                     </p>
                     <p>
-                        Selected with pick #{correctPlayer.pick} in round{' '}
-                        {correctPlayer.round} of the {correctPlayer.year} NFL
+                        Selected with pick #{game.correctPlayer.pick} in round{' '}
+                        {game.correctPlayer.round} of the {game.correctPlayer.year} NFL
                         Draft
                     </p>
                 </div>

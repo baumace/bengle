@@ -3,10 +3,12 @@ import clsx from 'clsx'
 
 interface BoardProps {
     board: Player[]
-    correctPlayer: Player
+    correctPlayer?: Player
 }
 
 function Board({ board, correctPlayer }: BoardProps) {
+    if (!correctPlayer) return
+
     enum CellStatus {
         CORRECT,
         ALMOST,
@@ -68,9 +70,9 @@ function Board({ board, correctPlayer }: BoardProps) {
                 className={clsx(
                     'text-lg font-bold py-1 border rounded-lg',
                     status === CellStatus.CORRECT &&
-                        'bg-green-300 dark:bg-green-700',
+                    'bg-green-300 dark:bg-green-700',
                     status === CellStatus.ALMOST &&
-                        'bg-yellow-200 dark:bg-yellow-600'
+                    'bg-yellow-200 dark:bg-yellow-600'
                 )}
             >
                 {text}
