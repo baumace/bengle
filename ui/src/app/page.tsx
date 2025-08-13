@@ -1,8 +1,7 @@
 'use client'
 
 import { ReactNode, useEffect, useState } from 'react'
-import { Era, filterPlayersByEra } from '@/types/Era'
-import { Player } from '@/types/Player'
+import { Era } from '@/types/Era'
 import { clsx } from 'clsx'
 import Board from '@/components/board/Board'
 import SearchBox from '@/components/search-box/SearchBox'
@@ -18,7 +17,7 @@ import { useGame } from '@/hooks/useGame'
 
 function App() {
     const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL)
-    const { players, loading, error }: UsePlayersReturn = usePlayers(selectedEra);
+    const { players }: UsePlayersReturn = usePlayers(selectedEra);
     const game = useGame({ players });
 
     // pop-ups
