@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# Bengle UI
+
+This is the frontend UI for the Bengle project, built with [Next.js](https://nextjs.org/) and [React](https://react.dev/). It provides a modern, responsive interface for interacting with the Bengle API.
+
+## Features
+
+- Modular component structure (Board, Button, Dropdown, PopUp, SearchBox, Tooltip)
+- TypeScript for type safety
+- ESLint and Prettier for code quality and formatting
+- Docker support for containerized deployment
+- Custom global styles and configuration
+- Static assets in `public/`
+- Draft picks data in `src/data/DraftPicks.json`
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- [Node.js](https://nodejs.org/) (v18+ recommended)
+- [pnpm](https://pnpm.io/) (or npm/yarn)
+- [Docker](https://www.docker.com/) (optional, for containerization)
+
+### Installation
+
+```sh
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Start the development server:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```sh
+pnpm dev
+```
 
-## Learn More
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-To learn more about Next.js, take a look at the following resources:
+### Linting & Formatting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```sh
+pnpm lint
+pnpm format
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Building for Production
 
-## Deploy on Vercel
+```sh
+pnpm build
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Running with Docker
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Build and run the Docker container:
+
+```sh
+docker build -t bengle-ui .
+docker run -p 3000:3000 bengle-ui
+```
+
+## Project Structure
+
+```
+ui/
+	src/
+		app/           # Next.js app directory (layout, global styles, favicon)
+		components/    # Reusable React components
+		data/          # Static data files
+		types/         # TypeScript type definitions
+	public/          # Static assets
+	Dockerfile       # Docker configuration
+	package.json     # Project metadata and scripts
+	tsconfig.json    # TypeScript configuration
+	eslint.config.mjs# ESLint configuration
+	postcss.config.mjs # PostCSS configuration
+```
