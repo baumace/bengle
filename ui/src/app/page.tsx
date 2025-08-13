@@ -1,7 +1,6 @@
 'use client'
 
 import { ReactNode, useEffect, useState } from 'react'
-import draftPicks from '@/data/DraftPicks.json'
 import { Era, filterPlayersByEra } from '@/types/Era'
 import { Player } from '@/types/Player'
 import { clsx } from 'clsx'
@@ -19,7 +18,7 @@ const MAX_ATTEMPTS = 7
 const INITIAL_ATTEMPT = 0
 
 function App() {
-    const [picksArray, setPicksArray] = useState<Player[]>(draftPicks)
+    const [picksArray, setPicksArray] = useState<Player[]>([])
 
     // game state
     const [board, setBoard] = useState<Player[]>([])
@@ -29,7 +28,7 @@ function App() {
         useState<boolean>(false)
     const [selectedEra, setSelectedEra] = useState<Era>(Era.ALL)
     const [correctPlayer, setCorrectPlayer] = useState<Player>(
-        draftPicks[Math.floor(Math.random() * draftPicks.length)]
+        picksArray[Math.floor(Math.random() * picksArray.length)]
     )
 
     // pop-ups
@@ -37,6 +36,15 @@ function App() {
     const [isHelpPopupActive, setHelpPopupActive] = useState(false)
     const [isSettingsPopupActive, setSettingsPopupActive] = useState(false)
     const [isReferencesPopupActive, setReferencesPopupActive] = useState(false)
+
+    useEffect(() => {
+        fetch("https://acebaum.com/bengle/api/players")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                setPicksArray(data)
+            })
+    }, [])
 
     useEffect(() => {
         if (currAttempt === MAX_ATTEMPTS && !gameOver) {
@@ -51,11 +59,15 @@ function App() {
     }, [correctPlayer])
 
     useEffect(() => {
-        setPicksArray(
-            draftPicks.filter((player) =>
-                filterPlayersByEra(player, selectedEra)
-            )
-        )
+        fetch("https://acebaum.com/bengle/api/players")
+            .then((response) => response.json())
+            .then((data) => {
+                setPicksArray(
+                    data.filter((player: Player) =>
+                        filterPlayersByEra(player, selectedEra)
+                    )
+                )
+            })
     }, [selectedEra])
 
     function selectPlayer(player: Player) {
@@ -155,10 +167,12 @@ function App() {
                 <Board board={board} correctPlayer={correctPlayer} />
             </main>
             <footer>
+                {/*
                 <HelpPopUp />
                 <SettingsPopUp />
                 <ReferencesPopUp />
                 <GameOverPopUp />
+                */}
             </footer>
         </div>
     )
