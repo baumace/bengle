@@ -7,7 +7,7 @@ interface BoardProps {
 }
 
 function Board({ board, correctPlayer }: BoardProps) {
-    if (!correctPlayer) return
+    if (!correctPlayer) return null
 
     enum CellStatus {
         CORRECT,
