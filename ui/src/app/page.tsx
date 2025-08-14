@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Era } from '@/types/Era'
 import { clsx } from 'clsx'
 import Board from '@/components/board/Board'
