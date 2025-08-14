@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { Player } from '@/types/Player'
 import { Era, filterPlayersByEra } from '@/types/Era'

@@ -11,7 +11,9 @@ This is the frontend UI for the Bengle project, built with [Next.js](https://nex
 - Docker support for containerized deployment
 - Custom global styles and configuration
 - Static assets in `public/`
-- Draft picks data in `src/data/DraftPicks.json`
+- Dynamic player data fetched from the Bengle API
+- Decoupled game and data logic via custom hooks (`useGame`, `usePlayers`)
+- Centralized pop-up state management
 
 ## Getting Started
 
@@ -64,9 +66,9 @@ docker run -p 3000:3000 bengle-ui
 ```
 ui/
 	src/
-		app/           # Next.js app directory (layout, global styles, favicon)
+		app/           # Next.js app directory
 		components/    # Reusable React components
-		data/          # Static data files
+		hooks/         # Custom React hooks
 		types/         # TypeScript type definitions
 	public/          # Static assets
 	Dockerfile       # Docker configuration

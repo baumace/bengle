@@ -1,13 +1,14 @@
+import { PopupType } from '@/types/Popup'
 import clsx from 'clsx'
 import { ReactNode } from 'react'
 
-interface PopUpProps {
+interface PopupProps {
     isVisible: boolean
-    setIsVisible: (isVisible: boolean) => void
+    setActivePopup: (popup: PopupType) => void
     children?: ReactNode
 }
 
-function PopUp({ isVisible, setIsVisible, children }: PopUpProps) {
+function Popup({ isVisible, setActivePopup, children }: PopupProps) {
     return (
         <div
             className={clsx(
@@ -27,7 +28,7 @@ function PopUp({ isVisible, setIsVisible, children }: PopUpProps) {
             <button
                 className="absolute size-8 bg-red-600 text-white right-2 top-2 rounded-lg overflow-hidden"
                 onClick={() => {
-                    setIsVisible(false)
+                    setActivePopup(PopupType.NONE)
                 }}
             >
                 <div className="flex bg-black/0 hover:bg-black/20 font-extrabold size-full items-center justify-center">
@@ -38,4 +39,4 @@ function PopUp({ isVisible, setIsVisible, children }: PopUpProps) {
     }
 }
 
-export default PopUp
+export default Popup
