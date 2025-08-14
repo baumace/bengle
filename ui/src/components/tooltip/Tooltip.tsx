@@ -2,11 +2,11 @@ import { clsx } from 'clsx'
 import { ReactNode } from 'react'
 
 interface TooltipProps {
-    content: string
+    text: string
     children?: ReactNode
 }
 
-function Tooltip({ content, children }: TooltipProps) {
+function Tooltip({ text, children }: TooltipProps) {
     return (
         <div className="relative group">
             {children}
@@ -23,7 +23,7 @@ function Tooltip({ content, children }: TooltipProps) {
                     'after:left-1/2 after:-top-[50%] after:-translate-x-1/2 after:border-8 after:border-x-transparent after:border-t-transparent after:border-b-gray-700'
                 )}
             >
-                {content}
+                {text}
             </div>
         </div>
     )

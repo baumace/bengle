@@ -3,10 +3,12 @@ import clsx from 'clsx'
 
 interface BoardProps {
     board: Player[]
-    correctPlayer: Player
+    correctPlayer?: Player
 }
 
 function Board({ board, correctPlayer }: BoardProps) {
+    if (!correctPlayer) return null
+
     enum CellStatus {
         CORRECT,
         ALMOST,
@@ -27,27 +29,27 @@ function Board({ board, correctPlayer }: BoardProps) {
                 <>
                     <PlayerCell
                         text={player.name}
-                        status={getNameCellStatus(player.name)}
+                        status={getNameCellStatus(player.name, correctPlayer)}
                     />
                     <PlayerCell
                         text={player.college}
-                        status={getCollegeCellStatus(player.college)}
+                        status={getCollegeCellStatus(player.college, correctPlayer)}
                     />
                     <PlayerCell
                         text={player.year.toString()}
-                        status={getYearCellStatus(player.year)}
+                        status={getYearCellStatus(player.year, correctPlayer)}
                     />
                     <PlayerCell
                         text={player.position}
-                        status={getPositionCellStatus(player.position)}
+                        status={getPositionCellStatus(player.position, correctPlayer)}
                     />
                     <PlayerCell
                         text={player.round.toString()}
-                        status={getRoundCellStatus(player.round)}
+                        status={getRoundCellStatus(player.round, correctPlayer)}
                     />
                     <PlayerCell
                         text={player.pick.toString()}
-                        status={getPickCellStatus(player.pick)}
+                        status={getPickCellStatus(player.pick, correctPlayer)}
                     />
                 </>
             ))}
@@ -68,9 +70,9 @@ function Board({ board, correctPlayer }: BoardProps) {
                 className={clsx(
                     'text-lg font-bold py-1 border rounded-lg',
                     status === CellStatus.CORRECT &&
-                        'bg-green-300 dark:bg-green-700',
+                    'bg-green-300 dark:bg-green-700',
                     status === CellStatus.ALMOST &&
-                        'bg-yellow-200 dark:bg-yellow-600'
+                    'bg-yellow-200 dark:bg-yellow-600'
                 )}
             >
                 {text}
@@ -78,19 +80,19 @@ function Board({ board, correctPlayer }: BoardProps) {
         )
     }
 
-    function getNameCellStatus(name: string): CellStatus {
+    function getNameCellStatus(name: string, correctPlayer: Player): CellStatus {
         return name === correctPlayer.name
             ? CellStatus.CORRECT
             : CellStatus.INCORRECT
     }
 
-    function getCollegeCellStatus(college: string): CellStatus {
+    function getCollegeCellStatus(college: string, correctPlayer: Player): CellStatus {
         return college === correctPlayer.college
             ? CellStatus.CORRECT
             : CellStatus.INCORRECT
     }
 
-    function getYearCellStatus(year: number): CellStatus {
+    function getYearCellStatus(year: number, correctPlayer: Player): CellStatus {
         if (year === correctPlayer.year) {
             return CellStatus.CORRECT
         } else if (Math.abs(correctPlayer.year - year) <= 5) {
@@ -99,7 +101,7 @@ function Board({ board, correctPlayer }: BoardProps) {
         return CellStatus.INCORRECT
     }
 
-    function getPositionCellStatus(position: string): CellStatus {
+    function getPositionCellStatus(position: string, correctPlayer: Player): CellStatus {
         const POSITIONS = {
             OFFENSE: ['QB', 'RB', 'T', 'G', 'C', 'OL', 'TE', 'WR', 'FB'],
             DEFENSE: [
@@ -132,7 +134,7 @@ function Board({ board, correctPlayer }: BoardProps) {
         return CellStatus.INCORRECT
     }
 
-    function getRoundCellStatus(round: number): CellStatus {
+    function getRoundCellStatus(round: number, correctPlayer: Player): CellStatus {
         if (round === correctPlayer.round) {
             return CellStatus.CORRECT
         } else if (Math.abs(correctPlayer.round - round) <= 2) {
@@ -141,7 +143,7 @@ function Board({ board, correctPlayer }: BoardProps) {
         return CellStatus.INCORRECT
     }
 
-    function getPickCellStatus(pick: number): CellStatus {
+    function getPickCellStatus(pick: number, correctPlayer: Player): CellStatus {
         if (pick === correctPlayer.pick) {
             return CellStatus.CORRECT
         } else if (Math.abs(correctPlayer.pick - pick) <= 20) {
@@ -149,6 +151,7 @@ function Board({ board, correctPlayer }: BoardProps) {
         }
         return CellStatus.INCORRECT
     }
+
     interface CellProps {
         text: string
         status?: CellStatus
