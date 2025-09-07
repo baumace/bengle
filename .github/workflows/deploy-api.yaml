@@ -54,10 +54,16 @@ jobs:
           export BWS_SUPABASE_URL_UUID="${{ secrets.BWS_SUPABASE_URL_UUID }}"
           export BWS_SUPABASE_KEY_UUID="${{ secrets.BWS_SUPABASE_KEY_UUID }}"
 
+      - name: BWS Login
+        run: bws login --access-token $BWS_ACCESS_TOKEN
+
       - name: Run new container
         run: |
           docker run -d --name bengle-api --restart always \
             -p 8080:8080 \
-            -e SUPABASE_URL=$(bws secret get ${{ secrets.BWS_SUPABASE_URL_UUID }} | jq -r '.value') \
-            -e SUPABASE_KEY=$(bws secret get ${{ secrets.BWS_SUPABASE_KEY_UUID }} | jq -r '.value') \
+            -e SUPABASE_URL=$(bws secret get $BWS_SUPABASE_URL_UUID | jq -r '.value') \
+            -e SUPABASE_KEY=$(bws secret get $BWS_SUPABASE_KEY_UUID | jq -r '.value') \
             ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
+
+      - name: Cleanup BWS session
+        run: bws logout
