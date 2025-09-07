@@ -33,7 +33,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
 
   deploy:
-    runs-on: [self-hosted, bengle-runner]
+    runs-on: self-hosted
     needs: build-and-push
     steps:
       - name: Pull latest Docker image
