@@ -50,17 +50,14 @@ jobs:
 
       - name: Set environment variables
         run: |
-          export BWS_ACCESS_TOKEN="${{ secrets.BWS_ACCESS_TOKEN }}"
-          export BWS_SUPABASE_URL_UUID="${{ secrets.BWS_SUPABASE_URL_UUID }}"
-          export BWS_SUPABASE_KEY_UUID="${{ secrets.BWS_SUPABASE_KEY_UUID }}"
-
-      - name: Set up BWS CLIT
-        run: bws --access-token $BWS_ACCESS_TOKEN
+          echo "BWS_ACCESS_TOKEN=${{ secrets.BWS_ACCESS_TOKEN }}" >> $GITHUB_ENV
+          echo "BWS_SUPABASE_URL_UUID=${{ secrets.BWS_SUPABASE_URL_UUID }}" >> $GITHUB_ENV
+          echo "BWS_SUPABASE_KEY_UUID=${{ secrets.BWS_SUPABASE_KEY_UUID }}" >> $GITHUB_ENV
 
       - name: Run new container
         run: |
           docker run -d --name bengle-api --restart always \
             -p 8080:8080 \
-            -e SUPABASE_URL=$(bws secret get $BWS_SUPABASE_URL_UUID | jq -r '.value') \
-            -e SUPABASE_KEY=$(bws secret get $BWS_SUPABASE_KEY_UUID | jq -r '.value') \
+            -e SUPABASE_URL=$(bws --access-token $BWS_ACCESS_TOKEN secret get $BWS_SUPABASE_URL_UUID | jq -r '.value') \
+            -e SUPABASE_KEY=$(bws --access-token $BWS_ACCESS_TOKEN secret get $BWS_SUPABASE_KEY_UUID | jq -r '.value') \
             ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
