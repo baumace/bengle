@@ -1,9 +1,9 @@
-name: Deploy UI to DigitalOcean Droplet
+name: Deploy UI to Host Server
 
 on:
   push:
     branches:
-      - main
+      - "main"
     paths:
       - 'ui/**'
       - '.github/workflows/deploy-ui.yaml'

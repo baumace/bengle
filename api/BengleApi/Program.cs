@@ -14,6 +14,9 @@ public class Program
         var url = Environment.GetEnvironmentVariable("SUPABASE_URL")?.Trim('\"');
         var key = Environment.GetEnvironmentVariable("SUPABASE_KEY")?.Trim('\"');
         
+        Console.WriteLine($"Supabase URL: {url}");
+        Console.WriteLine($"Supabase Key: {key}");
+        
         // Initialize Supabase
         var options = new SupabaseOptions
         {
