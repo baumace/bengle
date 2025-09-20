@@ -7,10 +7,15 @@ on:
     paths:
       - 'ui/**'
       - '.github/workflows/deploy-ui.yaml'
+  pull_request:
+    paths:
+      - 'ui/**'
+      - '.github/workflows/deploy-ui.yaml'
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -32,24 +37,42 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
 
+  build-only:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (no push)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./ui
+          file: ./ui/Dockerfile
+          push: false
+
   deploy:
-      runs-on: self-hosted
-      needs: build-and-push
-      steps:
-        - name: Pull latest Docker image
-          run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
+    runs-on: self-hosted
+    needs: build-and-push
+    if: github.event_name == 'push'
+    steps:
+      - name: Pull latest Docker image
+        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
 
-        - name: Stop existing container
-          run: docker stop bengle-ui || true
+      - name: Stop existing container
+        run: docker stop bengle-ui || true
 
-        - name: Remove existing container
-          run: docker rm bengle-ui || true
+      - name: Remove existing container
+        run: docker rm bengle-ui || true
 
-        - name: Prune unused images
-          run: docker image prune -f
+      - name: Prune unused images
+        run: docker image prune -f
 
-        - name: Run new container
-          run: |
-            docker run -d --name bengle-ui --restart always \
-              -p 8081:3000 \
-              ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
+      - name: Run new container
+        run: |
+          docker run -d --name bengle-ui --restart always \
+            -p 8081:3000 \
+            ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
