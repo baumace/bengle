@@ -60,19 +60,19 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - name: Pull latest Docker image
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
 
       - name: Stop existing container
-        run: docker stop bengle-ui || true
+        run: sudo docker stop bengle-ui || true
 
       - name: Remove existing container
-        run: docker rm bengle-ui || true
+        run: sudo docker rm bengle-ui || true
 
       - name: Prune unused images
-        run: docker image prune -f
+        run: sudo docker image prune -f
 
       - name: Run new container
         run: |
-          docker run -d --name bengle-ui --restart always \
+          sudo docker run -d --name bengle-ui --restart always \
             -p 8081:3000 \
             ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest

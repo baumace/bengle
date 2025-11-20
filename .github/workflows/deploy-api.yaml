@@ -60,16 +60,16 @@ jobs:
     if: github.event_name == 'push'
     steps:
       - name: Pull latest Docker image
-        run: docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
+        run: sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/bengle-api:latest
 
       - name: Stop existing container
-        run: docker stop bengle-api || true
+        run: sudo docker stop bengle-api || true
 
       - name: Remove existing container
-        run: docker rm bengle-api || true
+        run: sudo docker rm bengle-api || true
 
       - name: Prune unused images
-        run: docker image prune -f
+        run: sudo docker image prune -f
 
       - name: Set environment variables
         run: |
@@ -79,7 +79,7 @@ jobs:
 
       - name: Run new container
         run: |
-          docker run -d --name bengle-api --restart always \
+          sudo docker run -d --name bengle-api --restart always \
             -p 8080:8080 \
             -e SUPABASE_URL=$(bws --access-token $BWS_ACCESS_TOKEN secret get $BWS_SUPABASE_URL_UUID | jq -r '.value') \
             -e SUPABASE_KEY=$(bws --access-token $BWS_ACCESS_TOKEN secret get $BWS_SUPABASE_KEY_UUID | jq -r '.value') \
