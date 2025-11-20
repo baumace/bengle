@@ -15,7 +15,7 @@ export function usePlayers(selectedEra: Era): UsePlayersReturn {
 
     useEffect(() => {
         setLoading(true)
-        fetch('https://acebaum.com/bengle/api/players')
+        fetch('http://localhost:8080/bengle/api/players')
             .then((res) => res.json())
             .then((data: Player[]) => {
                 const filtered = selectedEra === Era.ALL
