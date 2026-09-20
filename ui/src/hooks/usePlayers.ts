@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react'
 import { Player } from '@/types/Player'
 import { Era, filterPlayersByEra } from '@/types/Era'
 
+// Baked in at build time by the static export, so this must be supplied as a
+// Docker build arg rather than a runtime env var on the container.
+const API_BASE_URL =
+    process.env.NEXT_PUBLIC_API_BASE_URL ?? 'http://localhost:8080'
+
 export interface UsePlayersReturn {
     players: Player[];
     loading: boolean;
@@ -15,7 +20,7 @@ export function usePlayers(selectedEra: Era): UsePlayersReturn {
 
     useEffect(() => {
         setLoading(true)
-        fetch('http://localhost:8080/bengle/api/players')
+        fetch(`${API_BASE_URL}/bengle/api/players`)
             .then((res) => res.json())
             .then((data: Player[]) => {
                 const filtered = selectedEra === Era.ALL

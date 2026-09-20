@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0@sha256:35792ea4ad1db051981f62b313f1be3b46b1f45cadbaa3c288cd0d3056eefb83 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0@sha256:e1fc6e423f543119c406d24e2e687d67c569f18f04a37a8b0005d80ad0dcee80 AS build
 WORKDIR /app
 
 # Copy everything
@@ -10,7 +10,7 @@ RUN dotnet restore
 RUN dotnet publish -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0@sha256:6c4df091e4e531bb93bdbfe7e7f0998e7ced344f54426b7e874116a3dc3233ff
+FROM mcr.microsoft.com/dotnet/aspnet:10.0@sha256:207cc51496778557731c81ff670333d8ade4a4fec22768fd1be8e78474a84ecf
 WORKDIR /app
 COPY --from=build /app/out .
 ENTRYPOINT ["dotnet", "BengleApi.dll"]
