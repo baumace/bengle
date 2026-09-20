@@ -1,6 +1,12 @@
-@BengleApi_HostAddress = http://localhost:5025
+@local = http://localhost:8080
+@azure = https://ca-bengle-api.bravecliff-f51f7703.eastus2.azurecontainerapps.io
 
-GET {{BengleApi_HostAddress}}/weatherforecast/
+### Local (dotnet run --launch-profile http)
+GET {{local}}/bengle/api/players
+Accept: application/json
+
+### Azure (Container App)
+GET {{azure}}/bengle/api/players
 Accept: application/json
 
 ###

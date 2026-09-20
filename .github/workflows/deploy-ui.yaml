@@ -1,5 +1,9 @@
 name: Deploy UI to Host Server
 
+env:
+  # Compiled into the static export at build time, so it cannot be a runtime setting.
+  API_BASE_URL: https://ca-bengle-api.bravecliff-f51f7703.eastus2.azurecontainerapps.io
+
 on:
   push:
     branches:
@@ -35,6 +39,8 @@ jobs:
           context: ./ui
           file: ./ui/Dockerfile
           push: true
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=${{ env.API_BASE_URL }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/bengle-ui:latest
 
   build-only:
@@ -53,6 +59,8 @@ jobs:
           context: ./ui
           file: ./ui/Dockerfile
           push: false
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=${{ env.API_BASE_URL }}
 
   deploy:
     runs-on: self-hosted
